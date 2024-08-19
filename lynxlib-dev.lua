@@ -4,9 +4,9 @@ settings.define("lynx.lynxlibPath", {
     value = shell.getRunningProgram()
 })
 local function versionCheck(minVer, maxVer)
-    if minVer < 5 then minVer = 5 end
+    if minVer < 4 then minVer = 4 end
     if maxVer ~= nil then
-		if maxVer < 5 then error("No. We do not speak of the pre-v5 days.") end
+		if maxVer < 4 then error("No. We do not speak of the pre-v4 days.") end
         if version > maxVer or version < minVer then error("ERROR: Program requires between version v"..minVer.." to v"..maxVer..". You have v"..version.." installed.") end
 	elseif version < minVer then error("ERROR: Program requires version v"..minVer.." or greater. You have v"..version.." installed.") end
     return version
