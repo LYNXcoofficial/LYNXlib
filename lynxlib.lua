@@ -161,7 +161,8 @@ local function twoColorPalette(mode, enableWhite)
 end
 
 local function inRange(a, x,y)
-    if a >= x and a <= y then return true
+    if a >= x and a <= y  then return true
+	elseif a <= x and a >= y then return true
     else return false end
 end
  
