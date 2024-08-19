@@ -36,42 +36,42 @@ local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxC
 --	inRange(a: number, x: number, y: number): Returns true if a is between x and y (inclusive). Added in v2.
 
 --	textBox(text: string, x1: number, y1: number, x2: number, y2: number, xmode: string, ymode: string, bC, tC]): Creates a textbox. Added in v2.
---      text: The text for the textbox.
---      x1, y1: The top-left corner of the textbox.
---      x2, y2: The bottom-right corner of the textbox.
---      xmode: No desc. Currently only accepts "LEFT"
---      ymode: No desc. Currently only accepts "TOP"
+--		text: The text for the textbox.
+--		x1, y1: The top-left corner of the textbox.
+--		x2, y2: The bottom-right corner of the textbox.
+--		xmode: No desc. Currently only accepts "LEFT"
+--		ymode: No desc. Currently only accepts "TOP"
 
---  readFile(dir: string): Returns the contents of a file, along with its LOSC-UHS header (if one exists). Added in v5.
---      dir: The path to the file (absolute or relative)
+--	readFile(dir: string): Returns the contents of a file, along with its LOSC-UHS header (if one exists). Added in v5.
+--		dir: The path to the file (absolute or relative)
 
---  writeFile(dir: string, contents: string, header: table): A file-writing function that adds the header automatically. Added in v5.
---      dir: The path to the file (absolute or relative)
---      contents: File contents
---      header: The LOSC-UHS header of the file
+--	writeFile(dir: string, contents: string, header: table): A file-writing function that adds the header automatically. Added in v5.
+--		dir: The path to the file (absolute or relative)
+--		contents: File contents
+--		header: The LOSC-UHS header of the file
 
---  hsv2rgb(h: number, s: number, v: number): Converts an HSV color to an RGB color. Added in v5.
---      h: The hue, in degrees
---      s: The saturation, scaled from 0 (fully pale) to 255 (fully saturated)
---      v: The value or brightness of the color, scaled from 0 (black) to 255 (fully bright)
+--	hsv2rgb(h: number, s: number, v: number): Converts an HSV color to an RGB color. Added in v5.
+--		h: The hue, in degrees
+--		s: The saturation, scaled from 0 (fully pale) to 255 (fully saturated)
+--		v: The value or brightness of the color, scaled from 0 (black) to 255 (fully bright)
 
---  recursiveList(path: string): Returns the path to every file inside a directory. Added in v5.
---      path: The path to the folder (absolute or relative)
+--	recursiveList(path: string): Returns the path to every file inside a directory. Added in v5.
+--		path: The path to the folder (absolute or relative)
 
---  round(num, digits, mode): Rounds a number to a certain number of post-decimal digits. Added in v5.
---      mode: The method of rounding to use. Defaults to nearest.
---          nearest, ceil, floor
+--	round(num, digits, mode): Rounds a number to a certain number of post-decimal digits. Added in v5.
+--		mode: The method of rounding to use. Defaults to nearest.
+--			nearest, ceil, floor
 
 -- ZIPLIB:
---  compress(inp: string, method: string): Compress a string. Added in v5.
---      inp: The data to be compressed.
---      method: The method to use for compression.
---          lz77, best, ratio
+--	compress(inp: string, method: string): Compress a string. Added in v5.
+--		inp: The data to be compressed.
+--		method: The method to use for compression.
+--			lz77, best, ratio
 
---  decompress(inp: string, method: string): Decompresses a string. Added in v5.
---      inp: The data to be decompressed.
---      method: The method to use for decompression.
---          lz77, best, ratio
+--	decompress(inp: string, method: string): Decompresses a string. Added in v5.
+--		inp: The data to be decompressed.
+--		method: The method to use for decompression.
+--			lz77, best, ratio
 
 --LYNX CRYPTOLIB:
 --	encrypt(inp: string, key: string, cipher: string): Encrypts a string using a key. Added in v1.
