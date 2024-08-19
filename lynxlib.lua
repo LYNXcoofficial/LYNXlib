@@ -16,12 +16,12 @@ local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxC
 
 --TABLE OF CONTENTS
 --Ln. 27: Documentation
---Ln. 104: Autorun
---Ln. 116: LYNX Miscellaneous Library (LYNXmisc)
---Ln. 322: ZipLib
---Ln. 409: LYNX CryptoLib
---Ln. 440: CHTP
---Ln. 496: Closing
+--Ln. 115: Autorun
+--Ln. 127: LYNX Miscellaneous Library (LYNXmisc)
+--Ln. 333: ZipLib
+--Ln. 420: LYNX CryptoLib
+--Ln. 451: CHTP
+--Ln. 509: Closing
 
 
 --DOCUMENTATION
@@ -61,6 +61,17 @@ local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxC
 --  round(num, digits, mode): Rounds a number to a certain number of post-decimal digits. Added in v5.
 --      mode: The method of rounding to use. Defaults to nearest.
 --          nearest, ceil, floor
+
+-- ZIPLIB:
+--  compress(inp: string, method: string): Compress a string. Added in v5.
+--      inp: The data to be compressed.
+--      method: The method to use for compression.
+--          lz77, best, ratio
+
+--  decompress(inp: string, method: string): Decompresses a string. Added in v5.
+--      inp: The data to be decompressed.
+--      method: The method to use for decompression.
+--          lz77, best, ratio
 
 --LYNX CRYPTOLIB:
 --	encrypt(inp: string, key: string, cipher: string): Encrypts a string using a key. Added in v1.
@@ -493,7 +504,7 @@ local function awaitPacket(header, from, key, lNetwork, channel)
     return textutils.unserialize(incPacket), incMessage[3], incMessage[2], incMessage[5]
 end
 
---CLOSING
 local chtp = { send = send, awaitPacket = awaitPacket }
 
+--CLOSING
 return { meta = meta, misc = lynxmisc, lm = lynxmisc, ziplib = ziplib, zl = ziplib, cl = lynxcryptolib, cryptolib = lynxcryptolib, lynxmisc = lynxmisc, lynxcryptolib = lynxcryptolib, lynxCryptoLib = lynxcryptolib, chtp = chtp }
