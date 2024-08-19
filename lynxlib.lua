@@ -15,75 +15,85 @@ local lynxColor = colors.blue
 local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxColor }
 
 --TABLE OF CONTENTS
---Ln. x: Documentation
---Ln. x: Autorun
---Ln. x: LYNX Miscellaneous Library (LYNXmisc)
---Ln. x: ZipLib
---Ln. x: LYNX CryptoLib
---Ln. x: CHTP
---Ln. x: Closing
+--Ln. 27: Documentation
+--Ln. 104: Autorun
+--Ln. 116: LYNX Miscellaneous Library (LYNXmisc)
+--Ln. 322: ZipLib
+--Ln. 409: LYNX CryptoLib
+--Ln. 440: CHTP
+--Ln. 496: Closing
 
 
 --DOCUMENTATION
 --LYNXMISC:
---	twoColorPalette(mode, enableWhite): Alters the terminal's color palette to a more restricted one for a "retro" feel. Added in v1.
+--	twoColorPalette(mode: string, enableWhite: bool): Alters the terminal's color palette to a more restricted one for a "retro" feel. Added in v1.
 --		mode: The palette to use.
 --			âREDâ, âGREENâ, âBLUEâ, âGRAYSCALEâ, âYELLOWâ, âCYANâ, âMAGENTAâ, 
 --			âORANGEâ, âLIMEâ, âMINTâ, âCORNFLOWERâ, âPURPLEâ, âFUCHSIAâ,
 --			âRED-CYANâ, âGREEN-MAGENTAâ, âBLUE-YELLOWâ
 --		enableWhite: Controls whether or not white can also be used, along with mode
 
---	inRange(a, x,y): Returns true if a is between x and y (inclusive). Added in v2.
+--	inRange(a: number, x: number, y: number): Returns true if a is between x and y (inclusive). Added in v2.
 
---	textBox(text, [field] or [x1,y1, x2,y2, xmode,ymode, bC,tC]): No desc. Added in v2.
+--	textBox(text: string, x1: number, y1: number, x2: number, y2: number, xmode: string, ymode: string, bC, tC]): Creates a textbox. Added in v2.
+--      text: The text for the textbox.
+--      x1, y1: The top-left corner of the textbox.
+--      x2, y2: The bottom-right corner of the textbox.
+--      xmode: No desc. Currently only accepts "LEFT"
+--      ymode: No desc. Currently only accepts "TOP"
 
---  readFile(dir): Returns the contents of a file, along with its LOSC-UHS header (if one exists). Added in v5.
+--  readFile(dir: string): Returns the contents of a file, along with its LOSC-UHS header (if one exists). Added in v5.
+--      dir: The path to the file (absolute or relative)
 
---  writeFile(dir, contents, header): No desc. Added in v5.
+--  writeFile(dir: string, contents: string, header: table): A file-writing function that adds the header automatically. Added in v5.
+--      dir: The path to the file (absolute or relative)
+--      contents: File contents
+--      header: The LOSC-UHS header of the file
 
---  hsv2rgb(h,s,v): Converts an HSV color to an RGB color. Added in v5.
+--  hsv2rgb(h: number, s: number, v: number): Converts an HSV color to an RGB color. Added in v5.
 --      h: The hue, in degrees
 --      s: The saturation, scaled from 0 (fully pale) to 255 (fully saturated)
 --      v: The value or brightness of the color, scaled from 0 (black) to 255 (fully bright)
 
---  recursiveList(path): Returns the path to every file inside a directory. Added in v5.
+--  recursiveList(path: string): Returns the path to every file inside a directory. Added in v5.
+--      path: The path to the folder (absolute or relative)
 
 --  round(num, digits, mode): Rounds a number to a certain number of post-decimal digits. Added in v5.
 --      mode: The method of rounding to use. Defaults to nearest.
 --          nearest, ceil, floor
 
 --LYNX CRYPTOLIB:
---	encrypt(String inp, String key, String cipher): Encrypts a string using a key. Added in v1.
+--	encrypt(inp: string, key: string, cipher: string): Encrypts a string using a key. Added in v1.
 --		inp: The string to encrypt
 --		key: The key to encrypt with
 --		cipher: The cipher to use.
 --			"best" or "latest": Current best cipher implemented.
 --			"otp": One-time pad cipher.
 
---	decrypt(String inp, String key, String cipher): Decrypts a string using a key. Added in v1.
+--	decrypt(inp: string, key: string, cipher: string): Decrypts a string using a key. Added in v1.
 --		inp: The string to decrypt
 --		key: The key to decrypt with
 --		cipher: The cipher to use.
 --			"best" or "latest": Current best cipher implemented.
 --			"otp": One-time pad cipher.
 
---	generatePublicKey(Num privateKey): Generates a 256-bit public key for a private key. Added in v1.
+--	generatePublicKey(privateKey: number): Generates a 256-bit public key for a private key. Added in v1.
 --		privateKey: The private key to generate a public key for. Leave nil for your own private key.
 
---	combineKeys(Num publicKey, Num privateKey): Combines your private key with a target's public key to make a 256-bit session key. Added in v1.
+--	combineKeys(publicKey: number, privateKey: number): Combines your private key with a target's public key to make a 256-bit session key. Added in v1.
 --		publicKey: The public key to combine with the private key
 --		privateKey: The private key to combine with the public key. Leave nil for your own private key.
 
---	String currentBestAlgo: The current best implemented cipher. Added in v1.
+--	string currentBestAlgo: The current best implemented cipher. Added in v1.
 
 
 --CHTP:
---	send(Table body, Num target, String header, String cipher, Num key, Bool lNetwork, Num channel): Sends a table packet to an IP. Added in v1.
+--	send(body: table, target: number, header: string, cipher: string, key: number, lNetwork: bool, channel: number): Sends a table packet to an IP. Added in v1.
 --		body: The table to send.
 --		target: The IP to send the packet to.
 --		header: The header of the packet.
 
---	awaitPacket(String header, Num source, Num key, Bool lNetwork, Num channel): No desc. Added in v1.
+--	awaitPacket(header: string, source: number, key: number, lNetwork: bool, channel: number): No desc. Added in v1.
 --		header: See send().
 --		source: The IP to listen for packets from. Leave nil to listen to all IPs.
 --		key: The key to decrypt the packet with.
@@ -145,18 +155,12 @@ local function inRange(a, x,y)
 end
  
 local function textBox(text, x1,y1, x2,y2, xmode,ymode, bC,tC)
-    local f
     local startTC = term.getTextColor()
     local startBGC = term.getBackgroundColor()
     if type(text) == "table" then
         local sText = text
         text = x1
         x1 = sText
-    end
-    if type(x1) == "table" then f = x1 end
-    if f ~= nil then
-        x1,y1, x2,y2, xmode,ymode, bC,tC = f.x1,f.y1, f.x2,f.y2, f.xMode,f.yMode, f.backgroundColor,f.textColor
-        if not text then text = f.text end
     end
 
     local xp,yp
@@ -190,7 +194,8 @@ local function textBox(text, x1,y1, x2,y2, xmode,ymode, bC,tC)
 end
 
 local function readFile(dir)
-    local file = fs.open(dir, "r")
+    local absDir = shell.resolve(dir)
+    local file = fs.open(absDir, "r")
     local c = file.readAll()
     file.close()
     if c:sub(5,5) == "|" then
@@ -488,6 +493,7 @@ local function awaitPacket(header, from, key, lNetwork, channel)
     return textutils.unserialize(incPacket), incMessage[3], incMessage[2], incMessage[5]
 end
 
+--CLOSING
 local chtp = { send = send, awaitPacket = awaitPacket }
 
 return { meta = meta, misc = lynxmisc, lm = lynxmisc, ziplib = ziplib, zl = ziplib, cl = lynxcryptolib, cryptolib = lynxcryptolib, lynxmisc = lynxmisc, lynxcryptolib = lynxcryptolib, lynxCryptoLib = lynxcryptolib, chtp = chtp }
