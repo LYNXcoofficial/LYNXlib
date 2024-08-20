@@ -47,81 +47,81 @@ local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxC
 
 --DOCUMENTATION
 --LYNXMISC:
---	twoColorPalette(mode: string, enableWhite: bool): Alters the terminal's color palette to a more restricted one for a "retro" feel. Added in v1.
+--	twoColorPalette(mode: string, enableWhite: bool): Alters the terminal's color palette to a more restricted one for a "retro" feel. Added in v0.1.
 --		mode: The palette to use.
 --			âREDâ, âGREENâ, âBLUEâ, âGRAYSCALEâ, âYELLOWâ, âCYANâ, âMAGENTAâ, 
 --			âORANGEâ, âLIMEâ, âMINTâ, âCORNFLOWERâ, âPURPLEâ, âFUCHSIAâ,
 --			âRED-CYANâ, âGREEN-MAGENTAâ, âBLUE-YELLOWâ
 --		enableWhite: Controls whether or not white can also be used, along with mode
 
---	inRange(a: number, x: number, y: number): Returns true if a is between x and y (inclusive). Added in v2.
+--	inRange(a: number, x: number, y: number): Returns true if a is between x and y (inclusive). Added in v0.1.0.
 
---	textBox(text: string, x1: number, y1: number, x2: number, y2: number, xmode: string, ymode: string, bC, tC]): Creates a textbox. Added in v2.
+--	textBox(text: string, x1: number, y1: number, x2: number, y2: number, xmode: string, ymode: string, bC, tC]): Creates a textbox. Added in v0.1.
 --		text: The text for the textbox.
 --		x1, y1: The top-left corner of the textbox.
 --		x2, y2: The bottom-right corner of the textbox.
 --		xmode: No desc. Currently only accepts "LEFT"
 --		ymode: No desc. Currently only accepts "TOP"
 
---	readFile(dir: string): Returns the contents of a file, along with its LOSC-UHS header (if one exists). Added in v5.
+--	readFile(dir: string): Returns the contents of a file, along with its LOSC-UHS header (if one exists). Added in v0.1.
 --		dir: The path to the file (absolute or relative)
 
---	writeFile(dir: string, contents: string, header: table): A file-writing function that adds the header automatically. Added in v5.
+--	writeFile(dir: string, contents: string, header: table): A file-writing function that adds the header automatically. Added in v0.1.
 --		dir: The path to the file (absolute or relative)
 --		contents: File contents
 --		header: The LOSC-UHS header of the file
 
---	hsv2rgb(h: number, s: number, v: number): Converts an HSV color to an RGB color. Added in v5.
+--	hsv2rgb(h: number, s: number, v: number): Converts an HSV color to an RGB color. Added in v0.1.
 --		h: The hue, in degrees
 --		s: The saturation, scaled from 0 (fully pale) to 255 (fully saturated)
 --		v: The value or brightness of the color, scaled from 0 (black) to 255 (fully bright)
 
---	recursiveList(path: string): Returns the path to every file inside a directory. Added in v5.
+--	recursiveList(path: string): Returns the path to every file inside a directory. Added in v0.1.
 --		path: The path to the folder (absolute or relative)
 
---	round(num, digits, mode): Rounds a number to a certain number of post-decimal digits. Added in v5.
+--	round(num, digits, mode): Rounds a number to a certain number of post-decimal digits. Added in v0.1.
 --		mode: The method of rounding to use. Defaults to nearest.
 --			nearest, ceil, floor
 
 -- ZIPLIB:
---	compress(inp: string, method: string): Compress a string. Added in v5.
+--	compress(inp: string, method: string): Compress a string. Added in v0.1.
 --		inp: The data to be compressed.
 --		method: The method to use for compression.
 --			lzw, best, ratio
 
---	decompress(inp: string, method: string): Decompresses a string. Added in v5.
+--	decompress(inp: string, method: string): Decompresses a string. Added in v0.1.
 --		inp: The data to be decompressed.
 --		method: The method to use for decompression.
 --			lzw, best, ratio
 
 --LYNX CRYPTOLIB:
---  stringToBytes(str: string): Converts string to bytes. Added in v5.
+--  stringToBytes(str: string): Converts string to bytes. Added in v0.1.
 --      str: String to be converted.
 
---  bytesToString(bytes: bytes): Converts bytes to string. Added in v5.
+--  bytesToString(bytes: bytes): Converts bytes to string. Added in v0.1.
 --      bytes: Bytes to be converted.
 
---  bytesToNumber(bytes: bytes, bits: number, byteSize: number): Converts bytes to number. Added in v5.
+--  bytesToNumber(bytes: bytes, bits: number, byteSize: number): Converts bytes to number. Added in v0.1.
 --      bytes: Bytes to be converted. Max length is bits/byteSize.
 --      bits: Must be the same as used in numberToBytes.
 --      byteSize: Must be the same as used in numberToBytes. Normally 8.
 
---  numberToBytes(num: number, bits: number, byteSize: number): Converts number to bytes. Added in v5.
+--  numberToBytes(num: number, bits: number, byteSize: number): Converts number to bytes. Added in v0.1.
 --      num: Number to be converted to bytes. Max length is bits/byteSize.
 --      bits: Must be the same as used in bytesToNumber.
 --      byteSize: Must be the same as used in bytesToNumber. Normally 8.
 
---  crypt(key: number, data: number): Used to encrypt/decrypt data. Added in v5.
+--  crypt(key: number, data: number): Used to encrypt/decrypt data. Added in v0.1.
 --      key: Either public or private key for encryption or decryption respectively.
 --      data: Data to be encrypted or decrypted.
 
 --CHTP:
---	send(body: table, target: number, header: string, cipher: string, key: number, lNetwork: bool, channel: number): Sends a table packet to an IP. Added in v1.
+--	send(body: table, target: number, header: string, cipher: string, key: number, lNetwork: bool, channel: number): Sends a table packet to an IP. Added in v0.1.
 --		body: The table to send.
 --		target: The IP to send the packet to.
 --		header: The header of the packet.
 
---	awaitPacket(header: string, source: number, key: number, lNetwork: bool, channel: number): No desc. Added in v
+--	awaitPacket(header: string, source: number, key: number, lNetwork: bool, channel: number): No desc. Added in v0.1.
 --		header: See send().
 --		source: The IP to listen for packets from. Leave nil to listen to all IPs.
 --		key: The key to decrypt the packet with.
