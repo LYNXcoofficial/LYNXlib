@@ -1,16 +1,31 @@
 
 --LYNXlib v5 by RockRancher24 & Overo3
-local version = 5
+local version = "5.0.0"
 settings.define("lynx.lynxlibPath", {
     value = shell.getRunningProgram()
 })
 local function versionCheck(minVer, maxVer)
-    if minVer < 4 then minVer = 4 end
-    if maxVer ~= nil then
-		if maxVer < 4 then error("No. We do not speak of the pre-v4 days.") end
-        if version > maxVer or version < minVer then error("ERROR: Program requires between version v"..minVer.." to v"..maxVer..". You have v"..version.." installed.") end
-	elseif version < minVer then error("ERROR: Program requires version v"..minVer.." or greater. You have v"..version.." installed.") end
-    return version
+	local vTable = {}
+	local minVTable = {}
+	local maxVTable = {}
+	for str in version:gmatch("([^.]+)") do
+		vTable:insert(str)
+	end
+	for str in minVTable:gmatch("([^.]+)") do
+		minVTable:insert(str)
+	end
+	for str in maxVTable:gmatch("([^.]+)") do
+		maxVTable:insert(str)
+	end
+    if maxVer ~= nil and minVer ~= nil then
+		if maxVTable[1] > vTable[1] < minVTable[1] then
+			if maxVTable[2] > vTable[2] < minVTable[2] then
+				if maxVTable[3] > vTable[3] < minVTable[3] then
+					error("ERROR: Program requires between version v"..minVer.." to v"..maxVer..". You have v"..version.." installed.")
+				end
+			end
+		end
+	end
 end
 local lynxColor = colors.blue
 local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxColor }
