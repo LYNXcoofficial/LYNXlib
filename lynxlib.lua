@@ -1,3 +1,4 @@
+
 --LYNXlib v5 by RockRancher24 & Overo3
 local version = 5
 settings.define("lynx.lynxlibPath", {
@@ -15,13 +16,13 @@ local lynxColor = colors.blue
 local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxColor }
 
 --TABLE OF CONTENTS
---Ln. X: Documentation
---Ln. X: Autorun
---Ln. X: LYNX Miscellaneous Library (LYNXmisc)
---Ln. X: ZipLib
---Ln. X: LYNX CryptoLib
---Ln. X: CHTP
---Ln. X: Closing
+--Ln. 28: Documentation
+--Ln. 113: Autorun
+--Ln. 125: LYNX Miscellaneous Library (LYNXmisc)
+--Ln. 332: ZipLib
+--Ln. 493: LYNX CryptoLib
+--Ln. 1374: CHTP
+--Ln. 1432: Closing
 
 
 --DOCUMENTATION
@@ -100,12 +101,13 @@ local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxC
 --		target: The IP to send the packet to.
 --		header: The header of the packet.
 
---	awaitPacket(header: string, source: number, key: number, lNetwork: bool, channel: number): No desc. Added in v1.
+--	awaitPacket(header: string, source: number, key: number, lNetwork: bool, channel: number): No desc. Added in v
 --		header: See send().
 --		source: The IP to listen for packets from. Leave nil to listen to all IPs.
 --		key: The key to decrypt the packet with.
 --		lNetwork: Whether or not to listen on the wired network.
 --		channel: What channel to listen on.
+
 
 
 --AUTORUN
@@ -158,7 +160,7 @@ end
 
 local function inRange(a, x,y)
     if a >= x and a <= y  then return true
-	elseif a <= x and a >= y then return true
+    elseif a <= x and a >= y then return true
     else return false end
 end
  
@@ -1368,6 +1370,7 @@ end
 local lynxcryptolib = { stringToBytes = stringToBytes, bytesToString = bytesToString, numberToBytes = numberToBytes, bytesToNumber = bytesToNumber, crypt = crypt }
 
 
+
 --CHTP
 local gModem
 local lModem
@@ -1428,3 +1431,4 @@ local chtp = { send = send, awaitPacket = awaitPacket }
 
 --CLOSING
 return { meta = meta, misc = lynxmisc, lm = lynxmisc, ziplib = ziplib, zl = ziplib, cl = lynxcryptolib, cryptolib = lynxcryptolib, lynxmisc = lynxmisc, lynxcryptolib = lynxcryptolib, lynxCryptoLib = lynxcryptolib, chtp = chtp }
+
