@@ -36,13 +36,13 @@ local lynxColor = colors.blue
 local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxColor }
 
 --TABLE OF CONTENTS
---Ln. 51: Documentation
---Ln. X: Autorun
---Ln. X: LYNX Miscellaneous Library (LYNXmisc)
---Ln. X: ZipLib
---Ln. X: LYNX CryptoLib
---Ln. X: CHTP
---Ln. X: Closing
+--Ln. 48: Documentation
+--Ln. 133: Autorun
+--Ln. 145: LYNX Miscellaneous Library (LYNXmisc)
+--Ln. 352: ZipLib
+--Ln. 513: LYNX CryptoLib
+--Ln. 1394: CHTP
+--Ln. 1452: Closing
 
 
 --DOCUMENTATION
