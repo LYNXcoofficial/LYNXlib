@@ -1,43 +1,48 @@
-
 --LYNXlib v5 by RockRancher24 & Overo3
 local version = "5.0.0"
 settings.define("lynx.lynxlibPath", {
     value = shell.getRunningProgram()
 })
+local function inRange(a, x,y)
+    if a >= x and a <= y  then return true
+    elseif a <= x and a >= y then return true
+    else return false end
+end
 local function versionCheck(minVer, maxVer)
 	local vTable = {}
 	local minVTable = {}
 	local maxVTable = {}
-	for str in version:gmatch("([^.]+)") do
-		table.insert(vTable,str)
+	for str in string.gmatch(version,"[0-9]%.?") do
+		if #str == 2 then table.insert(vTable,#vTable+1,tonumber(string.sub(str,1,1))) else table.insert(vTable,#vTable+1,tonumber(str)) end
 	end
-	for str in minVTable:gmatch("([^.]+)") do
-		table.insert(minVTable,str)
+	for str in string.gmatch(minVer,"[0-9]%.?") do
+		if #str == 2 then table.insert(minVTable,#minVTable+1,tonumber(string.sub(str,1,1))) else table.insert(minVTable,#minVTable+1,tonumber(str)) end
 	end
-	for str in maxVTable:gmatch("([^.]+)") do
-		table.insert(maxVTable,str)
+	for str in string.gmatch(maxVer,"[0-9]%.?") do
+		if #str == 2 then table.insert(maxVTable,#maxVTable+1,tonumber(string.sub(str,1,1))) else table.insert(maxVTable,#maxVTable+1,tonumber(str)) end
 	end
     if maxVer ~= nil and minVer ~= nil then
-		if maxVTable[1] > vTable[1] < minVTable[1] then
-			if maxVTable[2] > vTable[2] < minVTable[2] then
-				if maxVTable[3] > vTable[3] < minVTable[3] then
-					error("ERROR: Program requires between version v"..minVer.." to v"..maxVer..". You have v"..version.." installed.")
-				end
+		if vTable[1] > minVTable[1] or vTable[1] == minVTable[1] and vTable[2] > minVTable[2] or vTable[1] == minVTable[1] and vTable[2] == minVTable[2] and vTable[3] >= minVTable[3] then
+			if vTable[1] < maxVTable[1] or vTable[1] == maxVTable[1] and vTable[2] < maxVTable[2] or vTable[1] == maxVTable[1] and vTable[2] == maxVTable[2] and vTable[3] <= maxVTable[3] then
+				return true
 			end
 		end
+		return false
+	else
+		return nil
 	end
 end
 local lynxColor = colors.blue
 local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxColor }
 
 --TABLE OF CONTENTS
---Ln. 28: Documentation
---Ln. 113: Autorun
---Ln. 125: LYNX Miscellaneous Library (LYNXmisc)
---Ln. 332: ZipLib
---Ln. 493: LYNX CryptoLib
---Ln. 1374: CHTP
---Ln. 1432: Closing
+--Ln. 51: Documentation
+--Ln. X: Autorun
+--Ln. X: LYNX Miscellaneous Library (LYNXmisc)
+--Ln. X: ZipLib
+--Ln. X: LYNX CryptoLib
+--Ln. X: CHTP
+--Ln. X: Closing
 
 
 --DOCUMENTATION
