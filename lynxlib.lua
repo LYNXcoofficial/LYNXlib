@@ -15,13 +15,13 @@ local lynxColor = colors.blue
 local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxColor }
 
 --TABLE OF CONTENTS
---Ln. 27: Documentation
---Ln. 115: Autorun
---Ln. 127: LYNX Miscellaneous Library (LYNXmisc)
---Ln. 333: ZipLib
---Ln. 420: LYNX CryptoLib
---Ln. 451: CHTP
---Ln. 509: Closing
+--Ln. X: Documentation
+--Ln. X: Autorun
+--Ln. X: LYNX Miscellaneous Library (LYNXmisc)
+--Ln. X: ZipLib
+--Ln. X: LYNX CryptoLib
+--Ln. X: CHTP
+--Ln. X: Closing
 
 
 --DOCUMENTATION
@@ -66,12 +66,12 @@ local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxC
 --	compress(inp: string, method: string): Compress a string. Added in v5.
 --		inp: The data to be compressed.
 --		method: The method to use for compression.
---			lz77, best, ratio
+--			lzw, best, ratio
 
 --	decompress(inp: string, method: string): Decompresses a string. Added in v5.
 --		inp: The data to be decompressed.
 --		method: The method to use for decompression.
---			lz77, best, ratio
+--			lzw, best, ratio
 
 --LYNX CRYPTOLIB:
 --	encrypt(inp: string, key: string, cipher: string): Encrypts a string using a key. Added in v1.
@@ -332,76 +332,150 @@ end
 local lynxmisc = { twoColorPalette = twoColorPalette, inRange = inRange, textBox = textBox, readFile = readFile, writeFile = writeFile, getHeader = getHeader, hsv2rgb = hsv2rgb, recursiveList = recursiveList, round = round, scale = scale }
 
 --ZIPLIB
-local function lz77_compress(data)
-    local compressed = {}
-    local window_size = 256
-    local lookahead_size = 16
-    local data_len = #data
 
-    local i = 1
-    while i <= data_len do
-        local max_match_len = 0
-        local best_offset = 0
-        
-        for j = math.max(1, i - window_size), i - 1 do
-            local match_len = 0
-            while match_len < lookahead_size and data:sub(j + match_len, j + match_len) == data:sub(i + match_len, i + match_len) do
-                match_len = match_len + 1
-            end
-            
-            if match_len > max_match_len then
-                max_match_len = match_len
-                best_offset = i - j
-            end
-        end
-        
-        if max_match_len > 1 then
-            table.insert(compressed, string.format("<%d,%d>", best_offset, max_match_len))
-            i = i + max_match_len
-        else
-            table.insert(compressed, data:sub(i, i))
-            i = i + 1
-        end
-    end
+local char = string.char
+local type = type
+local select = select
+local sub = string.sub
+local tconcat = table.concat
 
-    return table.concat(compressed)
+local basedictcompress = {}
+local basedictdecompress = {}
+for i = 0, 255 do
+    local ic, iic = char(i), char(i, 0)
+    basedictcompress[ic] = iic
+    basedictdecompress[iic] = ic
 end
 
-local function lz77_decompress(compressed)
-    local decompressed = {}
-    local i = 1
-    local len = #compressed
-    
-    while i <= len do
-        local char = compressed:sub(i, i)
-        
-        if char == "<" then
-            local j = i + 1
-            local offset, length = compressed:match("(%d+),(%d+)", j)
-            offset = tonumber(offset)
-            length = tonumber(length)
-            i = j + #tostring(offset) + #tostring(length) + 1
-            local start_pos = #decompressed - offset + 1
-            for k = start_pos, start_pos + length - 1 do
-                table.insert(decompressed, decompressed[k])
-            end
-        elseif char == ">" then
-            i = i + 1
-        else
-            table.insert(decompressed, char)
-            i = i + 1
+local function dictAddA(str, dict, a, b)
+    if a >= 256 then
+        a, b = 0, b+1
+        if b >= 256 then
+            dict = {}
+            b = 1
         end
     end
-    
-    return table.concat(decompressed)
+    dict[str] = char(a,b)
+    a = a+1
+    return dict, a, b
 end
 
-local bestRatio = "lz77"
-local best = "lz77"
+local function lzw_compress(input)
+    if type(input) ~= "string" then
+        return nil, "string expected, got "..type(input)
+    end
+    local len = #input
+    if len <= 1 then
+        return "u"..input
+    end
+
+    local dict = {}
+    local a, b = 0, 1
+
+    local result = {"c"}
+    local resultlen = 1
+    local n = 2
+    local word = ""
+    for i = 1, len do
+        local c = sub(input, i, i)
+        local wc = word..c
+        if not (basedictcompress[wc] or dict[wc]) then
+            local write = basedictcompress[word] or dict[word]
+            if not write then
+                return nil, "algorithm error, could not fetch word"
+            end
+            result[n] = write
+            resultlen = resultlen + #write
+            n = n+1
+            if  len <= resultlen then
+                return "u"..input
+            end
+            dict, a, b = dictAddA(wc, dict, a, b)
+            word = c
+        else
+            word = wc
+        end
+    end
+    result[n] = basedictcompress[word] or dict[word]
+    resultlen = resultlen+#result[n]
+    n = n+1
+    if  len <= resultlen then
+        return "u"..input
+    end
+    return tconcat(result)
+end
+
+local function dictAddB(str, dict, a, b)
+    if a >= 256 then
+        a, b = 0, b+1
+        if b >= 256 then
+            dict = {}
+            b = 1
+        end
+    end
+    dict[char(a,b)] = str
+    a = a+1
+    return dict, a, b
+end
+
+local function lzw_decompress(input)
+    if type(input) ~= "string" then
+        return nil, "string expected, got "..type(input)
+    end
+
+    if #input < 1 then
+        return nil, "invalid input - not a compressed string"
+    end
+
+    local control = sub(input, 1, 1)
+    if control == "u" then
+        return sub(input, 2)
+    elseif control ~= "c" then
+        return nil, "invalid input - not a compressed string"
+    end
+    input = sub(input, 2)
+    local len = #input
+
+    if len < 2 then
+        return nil, "invalid input - not a compressed string"
+    end
+
+    local dict = {}
+    local a, b = 0, 1
+
+    local result = {}
+    local n = 1
+    local last = sub(input, 1, 2)
+    result[n] = basedictdecompress[last] or dict[last]
+    n = n+1
+    for i = 3, len, 2 do
+        local code = sub(input, i, i+1)
+        local lastStr = basedictdecompress[last] or dict[last]
+        if not lastStr then
+            return nil, "could not find last from dict. Invalid input?"
+        end
+        local toAdd = basedictdecompress[code] or dict[code]
+        if toAdd then
+            result[n] = toAdd
+            n = n+1
+            dict, a, b = dictAddB(lastStr..sub(toAdd, 1, 1), dict, a, b)
+        else
+            local tmp = lastStr..sub(lastStr, 1, 1)
+            result[n] = tmp
+            n = n+1
+            dict, a, b = dictAddB(tmp, dict, a, b)
+        end
+        last = code
+    end
+    return tconcat(result)
+end
+
+local bestRatio = "lzw"
+local best = "lzw"
 
 local function compress(inp, method)
     if not method then method = "best" end
-    if method:lower() == "lz77" then return lz77_compress(inp)
+    if method:lower() == "lzw" then return lzw_compress(inp)
     elseif method:lower() == "best" then compress(inp, best)
     elseif method:lower() == "ratio" then compress(inp, bestRatio)
     end
@@ -409,7 +483,7 @@ end
 
 local function decompress(inp, method)
     if not method then method = "best" end
-    if method:lower() == "lz77" then return lz77_decompress(inp)
+    if method:lower() == "lzw" then return lzw_decompress(inp)
     elseif method:lower() == "best" then decompress(inp, best)
     elseif method:lower() == "ratio" then decompress(inp, bestRatio)
     end
