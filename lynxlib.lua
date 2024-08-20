@@ -1,5 +1,5 @@
 --LYNXlib v5 by RockRancher24 & Overo3
-local version = "5.0.0"
+local version = "0.1.0"
 settings.define("lynx.lynxlibPath", {
     value = shell.getRunningProgram()
 })
