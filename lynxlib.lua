@@ -9,13 +9,13 @@ local function versionCheck(minVer, maxVer)
 	local minVTable = {}
 	local maxVTable = {}
 	for str in version:gmatch("([^.]+)") do
-		vTable:insert(str)
+		table.insert(vTable,str)
 	end
 	for str in minVTable:gmatch("([^.]+)") do
-		minVTable:insert(str)
+		table.insert(minVTable,str)
 	end
 	for str in maxVTable:gmatch("([^.]+)") do
-		maxVTable:insert(str)
+		table.insert(maxVTable,str)
 	end
     if maxVer ~= nil and minVer ~= nil then
 		if maxVTable[1] > vTable[1] < minVTable[1] then
