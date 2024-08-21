@@ -187,11 +187,6 @@ end
 local function textBox(text, x1,y1, x2,y2, xmode,ymode, bC,tC)
     local startTC = term.getTextColor()
     local startBGC = term.getBackgroundColor()
-    if type(text) == "table" then
-        local sText = text
-        text = x1
-        x1 = sText
-    end
 
     local xp,yp
     local tx,ty = term.getSize()
