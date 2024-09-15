@@ -2355,7 +2355,7 @@ aes.new_ctrMode = function (key, iv)
 	return context
 end
 
-local lynxcryptolib = { stringToBytes = stringToBytes, bytesToString = bytesToString, numberToBytes = numberToBytes, bytesToNumber = bytesToNumber, crypt = crypt, aes_encrypt = encrypt_str, aes_decrypt = decrypt_str }
+local lynxcryptolib = { stringToBytes = stringToBytes, bytesToString = bytesToString, numberToBytes = numberToBytes, bytesToNumber = bytesToNumber, crypt = crypt, aes_encrypt = aes.encrypt_str, aes_decrypt = aes.decrypt_str }
 
 
 
