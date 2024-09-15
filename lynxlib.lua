@@ -111,7 +111,7 @@ local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxC
 --      bits: Must be the same as used in bytesToNumber.
 --      byteSize: Must be the same as used in bytesToNumber. Normally 8.
 
---  crypt(key: number, data: number): Used to encrypt/decrypt data. Added in v0.1.
+--  crypt(key: table, data: number): Used to encrypt/decrypt data. Added in v0.1.
 --      key: Either public or private key for encryption or decryption respectively.
 --      data: Data to be encrypted or decrypted.
 
