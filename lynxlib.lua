@@ -1,5 +1,9 @@
---LYNXlib v0.1.0 by RockRancher24 & Overo3
-local version = "0.1.0"
+--LYNXlib v0.1.1 by RockRancher24 & Overo3
+
+local ll = { }
+do
+ll.meta = { }
+ll.meta.version = "0.1.1"
 settings.define("lynx.lynxlibPath", {
     value = shell.getRunningProgram()
 })
@@ -8,7 +12,7 @@ local function inRange(a, x,y)
     elseif a <= x and a >= y then return true
     else return false end
 end
-local function versionCheck(minVer, maxVer)
+function ll.meta.versionCheck(minVer, maxVer)
 	local vTable = {}
 	local minVTable = {}
 	local maxVTable = {}
@@ -32,17 +36,17 @@ local function versionCheck(minVer, maxVer)
 		return nil
 	end
 end
-local lynxColor = colors.blue
-local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxColor }
+ll.meta.lynxColor = colors.blue
+end
 
 --TABLE OF CONTENTS
---Ln. 48: Documentation
---Ln. 133: Autorun
---Ln. 145: LYNX Miscellaneous Library (LYNXmisc)
---Ln. 352: ZipLib
---Ln. 513: LYNX CryptoLib
---Ln. 1394: CHTP
---Ln. 1452: Closing
+--Ln. 52: Documentation
+--Ln. 147: Autorun
+--Ln. 168: LYNX Miscellaneous Library (LYNXmisc)
+--Ln. 372: ZipLib
+--Ln. 535: LYNX CryptoLib
+--Ln. 2383: CHTP
+--Ln. 2443: Closing
 
 
 --DOCUMENTATION
@@ -126,12 +130,12 @@ local meta = { version = version, versionCheck = versionCheck, lynxColor = lynxC
 --	iv: A number used as initalization. Must be the same when enc/dec.
 
 --CHTP:
---	send(body: table, target: number, header: string, cipher: string, key: number, lNetwork: bool, channel: number): Sends a table packet to an IP. Added in v0.1.
+--	send(body: table, target: number, header: string, cipher: string, key: table, lNetwork: bool): Sends a table packet to an IP. Added in v0.1.
 --		body: The table to send.
 --		target: The IP to send the packet to.
 --		header: The header of the packet.
 
---	awaitPacket(header: string, source: number, key: number, lNetwork: bool, channel: number): No desc. Added in v0.1.
+--	awaitPacket(header: string, source: number, key: table, lNetwork: bool): No desc. Added in v0.1.
 --		header: See send().
 --		source: The IP to listen for packets from. Leave nil to listen to all IPs.
 --		key: The key to decrypt the packet with.
@@ -145,15 +149,27 @@ if not settings.get("startup_util.dir_path") then settings.set("startup_util.dir
 else
     if not fs.exists(fs.combine(settings.get("startup_util.dir_path"), "llstartup.lua")) then
         local arf = fs.open(settings.get("startup_util.dir_path").."/llstartup.lua", "w")
-        local autorun = "math.randomseed(os.epoch())\nif settings.get(\"chtp.thisIP\") == nil then settings.define(\"chtp.thisIP\", {\n    description = \"This computer's IP address.\",\n    default = math.random(1, 2^32),\n})\nsettings.set(\"chtp.thisIP\", math.random(1, 2^32))\nsettings.save()\nend"
-        arf.write(autorun)
-        arf.close()
+        local autorun = [[
+math.randomseed(os.epoch())\n
+if settings.get(\"chtp.thisIP\") == nil then settings.define(\"chtp.thisIP\", {\n
+	description = \"This computer's IP address.\",\n
+	default = math.random(1, 2^32),\n
+})\n
+	settings.set(\"chtp.thisIP\", math.random(1, 2^32))\n
+	settings.save()\n
+end"
+	]]
+	arf.write(autorun)
+	arf.close()
     end
 end
 
 
 --LYNXMISC
-local function twoColorPalette(mode, enableWhite)
+do
+ll.lynxmisc = { }
+ll.lm = ll.lynxmisc
+function ll.lynxmisc.twoColorPalette(mode, enableWhite)
     for j = 1, 15 do
         i = 2 ^ j
         local r,g,b = term.getPaletteColor(i)
@@ -188,13 +204,13 @@ local function twoColorPalette(mode, enableWhite)
     end
 end
 
-local function inRange(a, x,y)
+function ll.lynxmisc.inRange(a, x,y)
     if a >= x and a <= y  then return true
     elseif a <= x and a >= y then return true
     else return false end
 end
- 
-local function textBox(text, x1,y1, x2,y2, xmode,ymode, bC,tC)
+
+function ll.lynxmisc.textBox(text, x1,y1, x2,y2, xmode,ymode, bC,tC)
     local startTC = term.getTextColor()
     local startBGC = term.getBackgroundColor()
 
@@ -228,7 +244,7 @@ local function textBox(text, x1,y1, x2,y2, xmode,ymode, bC,tC)
     term.setTextColor(startTC)
 end
 
-local function readFile(dir)
+function ll.lynxmisc.readFile(dir)
     local absDir = shell.resolve(dir)
     local file = fs.open(absDir, "r")
     local c = file.readAll()
@@ -241,7 +257,7 @@ local function readFile(dir)
     else return c end
 end
 
-local function writeFile(dir, contents, header)
+function ll.lynxmisc.writeFile(dir, contents, header)
     local oldHeader
     local _
     if fs.exists(dir) then
@@ -254,12 +270,12 @@ local function writeFile(dir, contents, header)
     return oldHeader or true
 end
 
-local function getHeader(dir)
+function ll.lynxmisc.getHeader(dir)
     local _, h = readFile(dir)
     return h
 end
 
-local function hsv2rgb(hue,saturation,value)
+function ll.lynxmisc.hsv2rgb(hue,saturation,value)
     saturation = saturation/255
     value = value/255
     local c = value*saturation
@@ -278,7 +294,7 @@ local function hsv2rgb(hue,saturation,value)
     return r,g,b
 end
 
-local function contextMenu(x,y, options, title, bgColor, titleColor)
+function ll.lynxmisc.contextMenu(x,y, options, title, bgColor, titleColor)
     local longestOption = #title
     for i = 1, #options do
         if #options[i] > longestOption then longestOption = #options[i] end
@@ -293,7 +309,7 @@ local function contextMenu(x,y, options, title, bgColor, titleColor)
     end
 end
 
-local function recursiveList(dir)
+function ll.lynxmisc.recursiveList(dir)
     local function sepList(path)
         local t = fs.list(path)
         local tF, tD = { }, { }
@@ -322,7 +338,7 @@ local function recursiveList(dir)
     return totalFiles
 end
 
-local function round(num, digits, mode)
+function ll.lynxmisc.round(num, digits, mode)
     if not digits then digits = 0 end
     local multNum = num * 10^digits
     if type(mode) == "string" and mode:lower() == "floor" then return math.floor(multNum) / 10^digits
@@ -330,7 +346,7 @@ local function round(num, digits, mode)
     else return math.floor(multNum+0.5) / 10^digits end
 end
 
-local function scale(num, units, digits, roundMode, prefix)
+function ll.lynxmisc.scale(num, units, digits, roundMode, prefix)
     local dNum
     if not digits then digits = 2 end
     local dTable = { { "", 0 }, { "k", 10^3 }, { "m", 10^6 }, { "b", 10^9 }, { "t", 10^12 }, { "qa", 10^15 }, { "qi", 10^18 }, { "sx", 10^21 }, { "sp", 10^24 }, { "oc", 10^27 }, { "no", 10^30 }, { "dc", 10^33 }, { "ud", 10^36 }, { "dd", 10^39 }, { "td", 10^42 } }
@@ -352,10 +368,12 @@ local function scale(num, units, digits, roundMode, prefix)
     return dNum
 end
 
-local lynxmisc = { twoColorPalette = twoColorPalette, inRange = inRange, textBox = textBox, readFile = readFile, writeFile = writeFile, getHeader = getHeader, hsv2rgb = hsv2rgb, recursiveList = recursiveList, round = round, scale = scale }
 
 --ZIPLIB
 
+ll.ziplib = { }
+ll.zl = ll.ziplib
+do
 local char = string.char
 local type = type
 local select = select
@@ -496,7 +514,7 @@ end
 local bestRatio = "lzw"
 local best = "lzw"
 
-local function compress(inp, method)
+function ll.ziplib.compress(inp, method)
     if not method then method = "best" end
     if method:lower() == "lzw" then return lzw_compress(inp)
     elseif method:lower() == "best" then compress(inp, best)
@@ -504,18 +522,21 @@ local function compress(inp, method)
     end
 end
 
-local function decompress(inp, method)
+function ll.ziplib.decompress(inp, method)
     if not method then method = "best" end
     if method:lower() == "lzw" then return lzw_decompress(inp)
     elseif method:lower() == "best" then decompress(inp, best)
     elseif method:lower() == "ratio" then decompress(inp, bestRatio)
     end
 end
-
-local ziplib = { compress = compress, decompress = decompress }
+end
 
 
 --LYNX CRYPTOLIB
+ll.cryptolib = { }
+ll.cl = ll.cryptolib
+ll.lynxcryptolib = ll.cryptolib
+do
 local function fl(x)
 	if x < 0 then
 		return math.ceil(x) + 0 -- make -0 go away
@@ -2354,19 +2375,21 @@ aes.new_ctrMode = function (key, iv)
 	context:set_ctr(iv)
 	return context
 end
-
-local lynxcryptolib = { stringToBytes = stringToBytes, bytesToString = bytesToString, numberToBytes = numberToBytes, bytesToNumber = bytesToNumber, crypt = crypt, aes_encrypt = aes.encrypt_str, aes_decrypt = aes.decrypt_str }
+end
+ll.cryptolib = { stringToBytes = stringToBytes, bytesToString = bytesToString, numberToBytes = numberToBytes, bytesToNumber = bytesToNumber, crypt = crypt, aes_encrypt = aes.encrypt_str, aes_decrypt = aes.decrypt_str }
 
 
 
 --CHTP
+ll.chtp = { }
+do
 local gModem
 local lModem
 local psd = { }
 local incMessage
-local perSideList = {"top","bottom","left","right","front","back"}
-for i = 1, 6 do
-    local curPer = peripheral.wrap(perSideList[i])
+local modems = { peripheral.find("modem") }
+for i in ipairs(modems) do
+    local curPer = modems[i]
     if curPer then
         if curPer.isWireless then
             if curPer.isWireless() == true then gModem = curPer
@@ -2387,7 +2410,7 @@ local function packetRec()
         elseif incMessage[3] ~= psd.header and psd.header then cont = true end
     until not cont
 end
-local function send(packet, target, header, cipher, key, lNetwork, channel)
+function ll.chtp.send(packet, target, header, cipher, key, lNetwork, channel)
     if not gModem then lNetwork = true end
     if lNetwork and not lModem then return nil, "No modem" end
     if not channel then channel = 127 end
@@ -2395,7 +2418,7 @@ local function send(packet, target, header, cipher, key, lNetwork, channel)
     if not lNetwork then gModem.transmit(channel, channel, { target, settings.get("chtp.thisIP"), header, sPacket, cipher })
     else lModem.transmit(channel, channel, { target, settings.get("chtp.thisIP"), header, sPacket, cipher }) end
 end
-local function awaitPacket(header, from, key, lNetwork, channel)
+function ll.chtp.awaitPacket(header, from, key, lNetwork, channel)
     if not gModem then lNetwork = true end
     if lNetwork and not lModem then return nil, "No modem" end
     psd.header = header
@@ -2414,9 +2437,8 @@ local function awaitPacket(header, from, key, lNetwork, channel)
     --Packet/nil, header/error code, return address, encryption method
     return textutils.unserialize(incPacket), incMessage[3], incMessage[2], incMessage[5]
 end
+end
 
-local chtp = { send = send, awaitPacket = awaitPacket }
 
 --CLOSING
-return { meta = meta, misc = lynxmisc, lm = lynxmisc, ziplib = ziplib, zl = ziplib, cl = lynxcryptolib, cryptolib = lynxcryptolib, lynxmisc = lynxmisc, lynxcryptolib = lynxcryptolib, lynxCryptoLib = lynxcryptolib, chtp = chtp }
-
+return ll
