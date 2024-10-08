@@ -8,5 +8,5 @@ Includes various libraries for the popular Minecraft mod ComputerCraft: Tweaked.
 
 * LYNXmisc
 * ZIPLIB
-* Cryptolib
+* LYNX CryptoLib
 * CHTP
