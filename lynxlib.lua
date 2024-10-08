@@ -1,66 +1,32 @@
 --LYNXlib v0.1.1 by RockRancher24 & Overo3
 
-local ll = { }
-do
-ll.meta = { }
-ll.meta.version = "0.1.1"
-settings.define("lynx.lynxlibPath", {
-    value = shell.getRunningProgram()
-})
-local function inRange(a, x,y)
-    if a >= x and a <= y  then return true
-    elseif a <= x and a >= y then return true
-    else return false end
-end
-function ll.meta.versionCheck(minVer, maxVer)
-	local vTable = {}
-	local minVTable = {}
-	local maxVTable = {}
-	for str in string.gmatch(version,"[0-9]%.?") do
-		if #str == 2 then table.insert(vTable,#vTable+1,tonumber(string.sub(str,1,1))) else table.insert(vTable,#vTable+1,tonumber(str)) end
-	end
-	for str in string.gmatch(minVer,"[0-9]%.?") do
-		if #str == 2 then table.insert(minVTable,#minVTable+1,tonumber(string.sub(str,1,1))) else table.insert(minVTable,#minVTable+1,tonumber(str)) end
-	end
-	for str in string.gmatch(maxVer,"[0-9]%.?") do
-		if #str == 2 then table.insert(maxVTable,#maxVTable+1,tonumber(string.sub(str,1,1))) else table.insert(maxVTable,#maxVTable+1,tonumber(str)) end
-	end
-    if maxVer ~= nil and minVer ~= nil then
-		if vTable[1] > minVTable[1] or vTable[1] == minVTable[1] and vTable[2] > minVTable[2] or vTable[1] == minVTable[1] and vTable[2] == minVTable[2] and vTable[3] >= minVTable[3] then
-			if vTable[1] < maxVTable[1] or vTable[1] == maxVTable[1] and vTable[2] < maxVTable[2] or vTable[1] == maxVTable[1] and vTable[2] == maxVTable[2] and vTable[3] <= maxVTable[3] then
-				return true
-			end
-		end
-		return false
-	else
-		return nil
-	end
-end
-ll.meta.lynxColor = colors.blue
-end
-
 --TABLE OF CONTENTS
---Ln. 52: Documentation
---Ln. 147: Autorun
---Ln. 168: LYNX Miscellaneous Library (LYNXmisc)
---Ln. 372: ZipLib
---Ln. 535: LYNX CryptoLib
---Ln. 2383: CHTP
---Ln. 2443: Closing
+--Ln. x: Documentation
+--Ln. x: Meta
+--Ln. x: Autorun
+--Ln. x: LYNX Miscellaneous Library (LYNXmisc)
+--Ln. x: ZipLib
+--Ln. x: LYNX CryptoLib
+--Ln. x: CHTP
+--Ln. x: Closing
 
 
 --DOCUMENTATION
+--META:
+--	version: String containing version of LYNXlib.
+--	versionCheck(minVer, maxVer): Returns true if current version is greater than minVer and less than maxVer.
+--	lynxColor: Number containing colors.lightBlue for whatever reason.
 --LYNXMISC:
 --	twoColorPalette(mode: string, enableWhite: bool): Alters the terminal's color palette to a more restricted one for a "retro" feel. Added in v0.1.
 --		mode: The palette to use.
---			âREDâ, âGREENâ, âBLUEâ, âGRAYSCALEâ, âYELLOWâ, âCYANâ, âMAGENTAâ, 
---			âORANGEâ, âLIMEâ, âMINTâ, âCORNFLOWERâ, âPURPLEâ, âFUCHSIAâ,
---			âRED-CYANâ, âGREEN-MAGENTAâ, âBLUE-YELLOWâ
+--			RED, GREEN, BLUE, GRAYSCALE, YELLOW, CYAN, MAGENTA, 
+--			ORANGE, LIME, MINT, CORNFLOWER, PURPLE, FUCHSIA,
+--			RED-CYAN, GREEN-MAGENTA, BLUE-YELLOW
 --		enableWhite: Controls whether or not white can also be used, along with mode
 
 --	inRange(a: number, x: number, y: number): Returns true if a is between x and y (inclusive). Added in v0.1.0.
 
---	textBox(text: string, x1: number, y1: number, x2: number, y2: number, xmode: string, ymode: string, bC, tC]): Creates a textbox. Added in v0.1.
+--	textBox(text: string, x1: number, y1: number, x2: number, y2: number, xmode: string, ymode: string, bC, tC]): Creates a text box. Added in v0.1.
 --		text: The text for the textbox.
 --		x1, y1: The top-left corner of the textbox.
 --		x2, y2: The bottom-right corner of the textbox.
@@ -142,6 +108,45 @@ end
 --		lNetwork: Whether or not to listen on the wired network.
 --		channel: What channel to listen on.
 
+
+local ll = { }
+do
+ll.meta = { }
+ll.meta.version = "0.1.1"
+settings.define("lynx.lynxlibPath", {
+    value = shell.getRunningProgram()
+})
+local function inRange(a, x,y)
+    if a >= x and a <= y  then return true
+    elseif a <= x and a >= y then return true
+    else return false end
+end
+function ll.meta.versionCheck(minVer, maxVer)
+	local vTable = {}
+	local minVTable = {}
+	local maxVTable = {}
+	for str in string.gmatch(version,"[0-9]%.?") do
+		if #str == 2 then table.insert(vTable,#vTable+1,tonumber(string.sub(str,1,1))) else table.insert(vTable,#vTable+1,tonumber(str)) end
+	end
+	for str in string.gmatch(minVer,"[0-9]%.?") do
+		if #str == 2 then table.insert(minVTable,#minVTable+1,tonumber(string.sub(str,1,1))) else table.insert(minVTable,#minVTable+1,tonumber(str)) end
+	end
+	for str in string.gmatch(maxVer,"[0-9]%.?") do
+		if #str == 2 then table.insert(maxVTable,#maxVTable+1,tonumber(string.sub(str,1,1))) else table.insert(maxVTable,#maxVTable+1,tonumber(str)) end
+	end
+    if maxVer ~= nil and minVer ~= nil then
+		if vTable[1] > minVTable[1] or vTable[1] == minVTable[1] and vTable[2] > minVTable[2] or vTable[1] == minVTable[1] and vTable[2] == minVTable[2] and vTable[3] >= minVTable[3] then
+			if vTable[1] < maxVTable[1] or vTable[1] == maxVTable[1] and vTable[2] < maxVTable[2] or vTable[1] == maxVTable[1] and vTable[2] == maxVTable[2] and vTable[3] <= maxVTable[3] then
+				return true
+			end
+		end
+		return false
+	else
+		return nil
+	end
+end
+ll.meta.lynxColor = colors.blue
+end
 
 
 --AUTORUN
