@@ -2195,10 +2195,7 @@ local function increment_ctr(blk)
 	return cpy
 end
 
-local function counter_mode_context()
-	key = {},
-	ctr = {},
-	stream_cache = {}, -- Use "leftover" bytes from generate() here.
+local function counter_mode_context(key, ctr, stream_cache)
 	set_key = function(self, key)
 		if type(key) == "string" then
 			if #key < 16 then
