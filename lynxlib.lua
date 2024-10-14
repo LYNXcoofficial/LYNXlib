@@ -1391,7 +1391,7 @@ end
 
 local aes = {}
 
-local aes.sbox = {
+local sbox = {
 [0]=0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
 0xCA, 0x82, 0xC9, 0x7D, 0xFA, 0x59, 0x47, 0xF0, 0xAD, 0xD4, 0xA2, 0xAF, 0x9C, 0xA4, 0x72, 0xC0,
 0xB7, 0xFD, 0x93, 0x26, 0x36, 0x3F, 0xF7, 0xCC, 0x34, 0xA5, 0xE5, 0xF1, 0x71, 0xD8, 0x31, 0x15,
@@ -1409,7 +1409,7 @@ local aes.sbox = {
 0xE1, 0xF8, 0x98, 0x11, 0x69, 0xD9, 0x8E, 0x94, 0x9B, 0x1E, 0x87, 0xE9, 0xCE, 0x55, 0x28, 0xDF,
 0x8C, 0xA1, 0x89, 0x0D, 0xBF, 0xE6, 0x42, 0x68, 0x41, 0x99, 0x2D, 0x0F, 0xB0, 0x54, 0xBB, 0x16}
 
-local aes.inv_sbox = {
+local inv_sbox = {
 [0]=0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38, 0xBF, 0x40, 0xA3, 0x9E, 0x81, 0xF3, 0xD7, 0xFB,
 0x7C, 0xE3, 0x39, 0x82, 0x9B, 0x2F, 0xFF, 0x87, 0x34, 0x8E, 0x43, 0x44, 0xC4, 0xDE, 0xE9, 0xCB,
 0x54, 0x7B, 0x94, 0x32, 0xA6, 0xC2, 0x23, 0x3D, 0xEE, 0x4C, 0x95, 0x0B, 0x42, 0xFA, 0xC3, 0x4E,
@@ -1427,7 +1427,7 @@ local aes.inv_sbox = {
 0xA0, 0xE0, 0x3B, 0x4D, 0xAE, 0x2A, 0xF5, 0xB0, 0xC8, 0xEB, 0xBB, 0x3C, 0x83, 0x53, 0x99, 0x61,
 0x17, 0x2B, 0x04, 0x7E, 0xBA, 0x77, 0xD6, 0x26, 0xE1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0C, 0x7D}
 
-local aes.Rcon = {
+local Rcon = {
 [0]=0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a,
 0x2f, 0x5e, 0xbc, 0x63, 0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39,
 0x72, 0xe4, 0xd3, 0xbd, 0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a,
@@ -1447,7 +1447,7 @@ local aes.Rcon = {
 
 -- Finite-field multiplication lookup tables:
 
-local aes.mul_2 = {
+local mul_2 = {
 [0]=0x00,0x02,0x04,0x06,0x08,0x0a,0x0c,0x0e,0x10,0x12,0x14,0x16,0x18,0x1a,0x1c,0x1e,
 0x20,0x22,0x24,0x26,0x28,0x2a,0x2c,0x2e,0x30,0x32,0x34,0x36,0x38,0x3a,0x3c,0x3e,
 0x40,0x42,0x44,0x46,0x48,0x4a,0x4c,0x4e,0x50,0x52,0x54,0x56,0x58,0x5a,0x5c,0x5e,
@@ -1466,7 +1466,7 @@ local aes.mul_2 = {
 0xfb,0xf9,0xff,0xfd,0xf3,0xf1,0xf7,0xf5,0xeb,0xe9,0xef,0xed,0xe3,0xe1,0xe7,0xe5,
 }
 
-local aes.mul_3 = {
+local mul_3 = {
 [0]=0x00,0x03,0x06,0x05,0x0c,0x0f,0x0a,0x09,0x18,0x1b,0x1e,0x1d,0x14,0x17,0x12,0x11,
 0x30,0x33,0x36,0x35,0x3c,0x3f,0x3a,0x39,0x28,0x2b,0x2e,0x2d,0x24,0x27,0x22,0x21,
 0x60,0x63,0x66,0x65,0x6c,0x6f,0x6a,0x69,0x78,0x7b,0x7e,0x7d,0x74,0x77,0x72,0x71,
@@ -1485,7 +1485,7 @@ local aes.mul_3 = {
 0x0b,0x08,0x0d,0x0e,0x07,0x04,0x01,0x02,0x13,0x10,0x15,0x16,0x1f,0x1c,0x19,0x1a,
 }
 
-local aes.mul_9 = {
+local mul_9 = {
 [0]=0x00,0x09,0x12,0x1b,0x24,0x2d,0x36,0x3f,0x48,0x41,0x5a,0x53,0x6c,0x65,0x7e,0x77,
 0x90,0x99,0x82,0x8b,0xb4,0xbd,0xa6,0xaf,0xd8,0xd1,0xca,0xc3,0xfc,0xf5,0xee,0xe7,
 0x3b,0x32,0x29,0x20,0x1f,0x16,0x0d,0x04,0x73,0x7a,0x61,0x68,0x57,0x5e,0x45,0x4c,
@@ -1504,7 +1504,7 @@ local aes.mul_9 = {
 0x31,0x38,0x23,0x2a,0x15,0x1c,0x07,0x0e,0x79,0x70,0x6b,0x62,0x5d,0x54,0x4f,0x46,
 }
 
-local aes.mul_11 = {
+local mul_11 = {
 [0]=0x00,0x0b,0x16,0x1d,0x2c,0x27,0x3a,0x31,0x58,0x53,0x4e,0x45,0x74,0x7f,0x62,0x69,
 0xb0,0xbb,0xa6,0xad,0x9c,0x97,0x8a,0x81,0xe8,0xe3,0xfe,0xf5,0xc4,0xcf,0xd2,0xd9,
 0x7b,0x70,0x6d,0x66,0x57,0x5c,0x41,0x4a,0x23,0x28,0x35,0x3e,0x0f,0x04,0x19,0x12,
@@ -1523,7 +1523,7 @@ local aes.mul_11 = {
 0xca,0xc1,0xdc,0xd7,0xe6,0xed,0xf0,0xfb,0x92,0x99,0x84,0x8f,0xbe,0xb5,0xa8,0xa3,
 }
 
-local aes.mul_13 = {
+local mul_13 = {
 [0]=0x00,0x0d,0x1a,0x17,0x34,0x39,0x2e,0x23,0x68,0x65,0x72,0x7f,0x5c,0x51,0x46,0x4b,
 0xd0,0xdd,0xca,0xc7,0xe4,0xe9,0xfe,0xf3,0xb8,0xb5,0xa2,0xaf,0x8c,0x81,0x96,0x9b,
 0xbb,0xb6,0xa1,0xac,0x8f,0x82,0x95,0x98,0xd3,0xde,0xc9,0xc4,0xe7,0xea,0xfd,0xf0,
@@ -1542,7 +1542,7 @@ local aes.mul_13 = {
 0xdc,0xd1,0xc6,0xcb,0xe8,0xe5,0xf2,0xff,0xb4,0xb9,0xae,0xa3,0x80,0x8d,0x9a,0x97,
 }
 
-local aes.mul_14 = {
+local mul_14 = {
 [0]=0x00,0x0e,0x1c,0x12,0x38,0x36,0x24,0x2a,0x70,0x7e,0x6c,0x62,0x48,0x46,0x54,0x5a,
 0xe0,0xee,0xfc,0xf2,0xd8,0xd6,0xc4,0xca,0x90,0x9e,0x8c,0x82,0xa8,0xa6,0xb4,0xba,
 0xdb,0xd5,0xc7,0xc9,0xe3,0xed,0xff,0xf1,0xab,0xa5,0xb7,0xb9,0x93,0x9d,0x8f,0x81,
@@ -1561,10 +1561,10 @@ local aes.mul_14 = {
 0xd7,0xd9,0xcb,0xc5,0xef,0xe1,0xf3,0xfd,0xa7,0xa9,0xbb,0xb5,0x9f,0x91,0x83,0x8d,
 }
 
-local aes.bxor = bit.bxor
-local aes.insert = table.insert
+local bxor = bit.bxor
+local insert = table.insert
 
-local aes.copy = function (input)
+local copy(input)
 	local c = {}
 	for i, v in pairs(input) do
 		c[i] = v
@@ -1572,21 +1572,21 @@ local aes.copy = function (input)
 	return c
 end
 
-local aes.subBytes = function (input, invert)
+local subBytes(input, invert)
 	for i=1, #input do
-		if not (aes.sbox[input[i]] and aes.inv_sbox[input[i]]) then
+		if not (sbox[input[i]] and inv_sbox[input[i]]) then
 			error("subBytes: input["..i.."] > 0xFF")
 		end
 		if invert then
-			input[i] = aes.inv_sbox[input[i]]
+			input[i] = inv_sbox[input[i]]
 		else
-			input[i] = aes.sbox[input[i]]
+			input[i] = sbox[input[i]]
 		end
 	end
 	return input
 end
 
-local aes.shiftRows = function (input)
+local shiftRows(input)
 	local copy = {}
 	-- Row 1: No change
 	copy[1] = input[1]
@@ -1611,7 +1611,7 @@ local aes.shiftRows = function (input)
 	return copy
 end
 
-local aes.invShiftRows = function (input)
+local invShiftRows(input)
 	local copy = {}
 	-- Row 1: No change
 	copy[1] = input[1]
@@ -1636,7 +1636,7 @@ local aes.invShiftRows = function (input)
 	return copy
 end
 
-local aes.finite_field_mul = function (a,b) -- Multiply two numbers in GF(256), assuming that polynomials are 8 bits wide
+local finite_field_mul(a,b) -- Multiply two numbers in GF(256), assuming that polynomials are 8 bits wide
 	local product = 0
 	local mulA, mulB = a,b
 	for i=1, 8 do
@@ -1645,39 +1645,39 @@ local aes.finite_field_mul = function (a,b) -- Multiply two numbers in GF(256), 
 			break
 		end
 		if bit.band(1, mulB) > 0 then
-			product = aes.bxor(product, mulA)
+			product = bxor(product, mulA)
 		end
 		mulB = bit.brshift(mulB, 1)
 		local carry = bit.band(0x80, mulA)
 		mulA = bit.band(0xFF, bit.blshift(mulA, 1))
 		if carry > 0 then
-			mulA = aes.bxor( mulA, 0x1B )
+			mulA = bxor( mulA, 0x1B )
 		end
 	end
 	return product
 end
 
-local aes.mixColumn = function (column)
+local mixColumn(column)
 	local output = {}
 	--print("MixColumn: #column: "..#column)
-	output[1] = aes.bxor( aes.mul_2[column[1]], aes.bxor( aes.mul_3[column[2]], aes.bxor( column[3], column[4] ) ) )
-	output[2] = aes.bxor( column[1], aes.bxor( aes.mul_2[column[2]], aes.bxor( aes.mul_3[column[3]], column[4] ) ) )
-	output[3] = aes.bxor( column[1], aes.bxor( column[2], aes.bxor( aes.mul_2[column[3]], aes.mul_3[column[4]] ) ) )
-	output[4] = aes.bxor( aes.mul_3[column[1]], aes.bxor( column[2], aes.bxor( column[3], aes.mul_2[column[4]] ) ) )
+	output[1] = bxor( mul_2[column[1]], bxor( mul_3[column[2]], bxor( column[3], column[4] ) ) )
+	output[2] = bxor( column[1], bxor( mul_2[column[2]], bxor( mul_3[column[3]], column[4] ) ) )
+	output[3] = bxor( column[1], bxor( column[2], bxor( mul_2[column[3]], mul_3[column[4]] ) ) )
+	output[4] = bxor( mul_3[column[1]], bxor( column[2], bxor( column[3], mul_2[column[4]] ) ) )
 	return output
 end
 
-local aes.invMixColumn = function (column)
+local invMixColumn(column)
 	local output = {}
 	--print("InvMixColumn: #column: "..#column)
-	output[1] = aes.bxor( aes.mul_14[column[1]], aes.bxor( aes.mul_11[column[2]], aes.bxor( aes.mul_13[column[3]], aes.mul_9[column[4]] ) ) )
-	output[2] = aes.bxor( aes.mul_9[column[1]], aes.bxor( aes.mul_14[column[2]], aes.bxor( aes.mul_11[column[3]], aes.mul_13[column[4]] ) ) )
-	output[3] = aes.bxor( aes.mul_13[column[1]], aes.bxor( aes.mul_9[column[2]], aes.bxor( aes.mul_14[column[3]], aes.mul_11[column[4]] ) ) )
-	output[4] = aes.bxor( aes.mul_11[column[1]], aes.bxor( aes.mul_13[column[2]], aes.bxor( aes.mul_9[column[3]], aes.mul_14[column[4]] ) ) )
+	output[1] = bxor( mul_14[column[1]], bxor( mul_11[column[2]], bxor( mul_13[column[3]], mul_9[column[4]] ) ) )
+	output[2] = bxor( mul_9[column[1]], bxor( mul_14[column[2]], bxor( mul_11[column[3]], mul_13[column[4]] ) ) )
+	output[3] = bxor( mul_13[column[1]], bxor( mul_9[column[2]], bxor( mul_14[column[3]], mul_11[column[4]] ) ) )
+	output[4] = bxor( mul_11[column[1]], bxor( mul_13[column[2]], bxor( mul_9[column[3]], mul_14[column[4]] ) ) )
 	return output
 end
 
-local aes.mixColumns = function (input, invert)
+local mixColumns(input, invert)
 	--print("MixColumns: #input: "..#input)
 	-- Ooops. I mixed the ROWS instead of the COLUMNS on accident.
 	local output = {}
@@ -1692,15 +1692,15 @@ local aes.mixColumns = function (input, invert)
 	local c3 = { input[3], input[7], input[11], input[15] }
 	local c4 = { input[4], input[8], input[12], input[16] }
 	if invert then
-		c1 = aes.invMixColumn(c1)
-		c2 = aes.invMixColumn(c2)
-		c3 = aes.invMixColumn(c3)
-		c4 = aes.invMixColumn(c4)
+		c1 = invMixColumn(c1)
+		c2 = invMixColumn(c2)
+		c3 = invMixColumn(c3)
+		c4 = invMixColumn(c4)
 	else
-		c1 = aes.mixColumn(c1)
-		c2 = aes.mixColumn(c2)
-		c3 = aes.mixColumn(c3)
-		c4 = aes.mixColumn(c4)
+		c1 = mixColumn(c1)
+		c2 = mixColumn(c2)
+		c3 = mixColumn(c3)
+		c4 = mixColumn(c4)
 	end
 	--[[
 	output[1] = c1[1]
@@ -1747,26 +1747,26 @@ local aes.mixColumns = function (input, invert)
 	return output
 end
 
-local aes.addRoundKey = function (input, exp_key, round)
+local addRoundKey(input, exp_key, round)
 	local output = {}
 	for i=1, 16 do
 		assert(input[i], "input["..i.."]=nil!")
 		assert(exp_key[ ((round-1)*16)+i ], "round_key["..(((round-1)*16)+i).."]=nil!")
-		output[i] = aes.bxor( input[i], exp_key[ ((round-1)*16)+i ] )
+		output[i] = bxor( input[i], exp_key[ ((round-1)*16)+i ] )
 	end
 	return output
 end
 
-local aes.key_schedule = function (enc_key)
+local key_schedule(enc_key)
 	local function core(in1, in2, in3, in4, i)
 		local s1 = in2
 		local s2 = in3
 		local s3 = in4
 		local s4 = in1
-		s1 = aes.bxor(aes.sbox[s1], aes.Rcon[i])
-		s2 = aes.sbox[s2]
-		s3 = aes.sbox[s3]
-		s4 = aes.sbox[s4]
+		s1 = bxor(sbox[s1], Rcon[i])
+		s2 = sbox[s2]
+		s3 = sbox[s3]
+		s4 = sbox[s4]
 		return s1, s2, s3, s4
 	end
 
@@ -1807,36 +1807,36 @@ local aes.key_schedule = function (enc_key)
 		local t4 = exp_key[#exp_key-3]
 		t1, t2, t3, t4 = core(t1, t2, t3, t4, rcon_iter)
 		rcon_iter = rcon_iter+1
-		t1 = aes.bxor(t1, exp_key[#exp_key-(n-1)])
-		t2 = aes.bxor(t2, exp_key[#exp_key-(n-2)])
-		t3 = aes.bxor(t3, exp_key[#exp_key-(n-3)])
-		t4 = aes.bxor(t4, exp_key[#exp_key-(n-4)])
-		aes.insert(exp_key, t1)
-		aes.insert(exp_key, t2)
-		aes.insert(exp_key, t3)
-		aes.insert(exp_key, t4)
+		t1 = bxor(t1, exp_key[#exp_key-(n-1)])
+		t2 = bxor(t2, exp_key[#exp_key-(n-2)])
+		t3 = bxor(t3, exp_key[#exp_key-(n-3)])
+		t4 = bxor(t4, exp_key[#exp_key-(n-4)])
+		insert(exp_key, t1)
+		insert(exp_key, t2)
+		insert(exp_key, t3)
+		insert(exp_key, t4)
 		for i=1, 3 do
-			t1 = aes.bxor(exp_key[#exp_key], exp_key[#exp_key-(n-1)])
-			t2 = aes.bxor(exp_key[#exp_key-1], exp_key[#exp_key-(n-2)])
-			t3 = aes.bxor(exp_key[#exp_key-2], exp_key[#exp_key-(n-3)])
-			t4 = aes.bxor(exp_key[#exp_key-3], exp_key[#exp_key-(n-4)])
-			aes.insert(exp_key, t1)
-			aes.insert(exp_key, t2)
-			aes.insert(exp_key, t3)
-			aes.insert(exp_key, t4)
+			t1 = bxor(exp_key[#exp_key], exp_key[#exp_key-(n-1)])
+			t2 = bxor(exp_key[#exp_key-1], exp_key[#exp_key-(n-2)])
+			t3 = bxor(exp_key[#exp_key-2], exp_key[#exp_key-(n-3)])
+			t4 = bxor(exp_key[#exp_key-3], exp_key[#exp_key-(n-4)])
+			insert(exp_key, t1)
+			insert(exp_key, t2)
+			insert(exp_key, t3)
+			insert(exp_key, t4)
 		end
 		if key_type == 3 then -- If we're processing a 256 bit key...
 			-- Take the previous 4 bytes of the expanded key, run them through the sbox,
 			-- then XOR them with the previous n bytes of the expanded key, then output them
 			-- as the next 4 bytes of expanded key.
-			t1 = aes.bxor(aes.sbox[exp_key[#exp_key]], exp_key[#exp_key-(n-1)])
-			t2 = aes.bxor(aes.sbox[exp_key[#exp_key-1]], exp_key[#exp_key-(n-2)])
-			t3 = aes.bxor(aes.sbox[exp_key[#exp_key-2]], exp_key[#exp_key-(n-3)])
-			t4 = aes.bxor(aes.sbox[exp_key[#exp_key-3]], exp_key[#exp_key-(n-4)])
-			aes.insert(exp_key, t1)
-			aes.insert(exp_key, t2)
-			aes.insert(exp_key, t3)
-			aes.insert(exp_key, t4)
+			t1 = bxor(sbox[exp_key[#exp_key]], exp_key[#exp_key-(n-1)])
+			t2 = bxor(sbox[exp_key[#exp_key-1]], exp_key[#exp_key-(n-2)])
+			t3 = bxor(sbox[exp_key[#exp_key-2]], exp_key[#exp_key-(n-3)])
+			t4 = bxor(sbox[exp_key[#exp_key-3]], exp_key[#exp_key-(n-4)])
+			insert(exp_key, t1)
+			insert(exp_key, t2)
+			insert(exp_key, t3)
+			insert(exp_key, t4)
 		end
 		if key_type == 2 or key_type == 3 then -- If we're processing a 192-bit or 256-bit key..
 			local i = 2
@@ -1844,14 +1844,14 @@ local aes.key_schedule = function (enc_key)
 				i = 3
 			end
 			for j=1, i do
-				t1 = aes.bxor(exp_key[#exp_key], exp_key[#exp_key-(n-1)])
-				t2 = aes.bxor(exp_key[#exp_key-1], exp_key[#exp_key-(n-2)])
-				t3 = aes.bxor(exp_key[#exp_key-2], exp_key[#exp_key-(n-3)])
-				t4 = aes.bxor(exp_key[#exp_key-3], exp_key[#exp_key-(n-4)])
-				aes.insert(exp_key, t1)
-				aes.insert(exp_key, t2)
-				aes.insert(exp_key, t3)
-				aes.insert(exp_key, t4)
+				t1 = bxor(exp_key[#exp_key], exp_key[#exp_key-(n-1)])
+				t2 = bxor(exp_key[#exp_key-1], exp_key[#exp_key-(n-2)])
+				t3 = bxor(exp_key[#exp_key-2], exp_key[#exp_key-(n-3)])
+				t4 = bxor(exp_key[#exp_key-3], exp_key[#exp_key-(n-4)])
+				insert(exp_key, t1)
+				insert(exp_key, t2)
+				insert(exp_key, t3)
+				insert(exp_key, t4)
 			end
 		end
 	end
@@ -1864,7 +1864,7 @@ end
 -- Is transformed into this:
 -- {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF}, {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0,0,0,0} (16 0xFF bytes, followed by 12 0xFF bytes and 4 0x00 bytes for padding)
 
-local aes.breakIntoBlocks = function (data)
+local breakIntoBlocks(data)
 	if type(data) ~= "string" then
 		error("breakIntoBlocks: data is not a string", 2)
 	end
@@ -1890,7 +1890,7 @@ end
 -- local key = strToBlocks(keyStr)
 -- key = key[1]
 
-local aes.strToBlocks = function (str)
+local strToBlocks(str)
 	local rawBytestream = {}
 	local blocks = {}
 	for i=1, #str do
@@ -1907,8 +1907,8 @@ end
 
 -- Encrypt / Decrypt individual blocks:
 
-local aes.encrypt_block = function (data, key)
-	local exp_key = aes.key_schedule(key)
+local encrypt_block(data, key)
+	local exp_key = key_schedule(key)
 	local state = data
 	local nr = 0
 
@@ -1923,25 +1923,25 @@ local aes.encrypt_block = function (data, key)
 	end
 
 	-- Inital round:
-	state = aes.addRoundKey(state, exp_key, 1)
+	state = addRoundKey(state, exp_key, 1)
 
 	-- Repeat (Nr-1) times:
 	for round_num = 2, nr-1 do
-		state = aes.subBytes(state)
-		state = aes.shiftRows(state)
-		state = aes.mixColumns(state)
-		state = aes.addRoundKey(state, exp_key, round_num)
+		state = subBytes(state)
+		state = shiftRows(state)
+		state = mixColumns(state)
+		state = addRoundKey(state, exp_key, round_num)
 	end
 
 	-- Final round (No mixColumns()):
-	state = aes.subBytes(state)
-	state = aes.shiftRows(state)
-	state = aes.addRoundKey(state, exp_key, nr)
+	state = subBytes(state)
+	state = shiftRows(state)
+	state = addRoundKey(state, exp_key, nr)
 	return state
 end
 
-local aes.decrypt_block = function (data, key)
-	local exp_key = aes.key_schedule(key)
+local decrypt_block(data, key)
+	local exp_key = key_schedule(key)
 	local state = data
 	local nr = 0
 
@@ -1956,24 +1956,24 @@ local aes.decrypt_block = function (data, key)
 	end
 
 	-- Inital round:
-	state = aes.addRoundKey(state, exp_key, nr)
+	state = addRoundKey(state, exp_key, nr)
 
 	-- Repeat (Nr-1) times:
 	for round_num = nr-1, 2, -1 do
-		state = aes.invShiftRows(state)
-		state = aes.subBytes(state, true)
-		state = aes.addRoundKey(state, exp_key, round_num)
-		state = aes.mixColumns(state, true)
+		state = invShiftRows(state)
+		state = subBytes(state, true)
+		state = addRoundKey(state, exp_key, round_num)
+		state = mixColumns(state, true)
 	end
 
 	-- Final round (No mixColumns()):
-	state = aes.invShiftRows(state)
-	state = aes.subBytes(state, true)
-	state = aes.addRoundKey(state, exp_key, 1)
+	state = invShiftRows(state)
+	state = subBytes(state, true)
+	state = addRoundKey(state, exp_key, 1)
 	return state
 end
 
-local aes.encrypt_block_customExpKey = function (data, exp_key--[[, key_type]]) -- Encrypt blocks, but using a precalculated expanded key instead of performing the key expansion on every step like with the normal encrypt_block(2) call
+local encrypt_block_customExpKey(data, exp_key--[[, key_type]]) -- Encrypt blocks, but using a precalculated expanded key instead of performing the key expansion on every step like with the normal encrypt_block(2) call
 	local state = data
 	local nr = 0
 	if #exp_key == 176 then -- Key type 1 (128-bits)
@@ -1987,24 +1987,24 @@ local aes.encrypt_block_customExpKey = function (data, exp_key--[[, key_type]]) 
 	end
 
 	-- Inital round:
-	state = aes.addRoundKey(state, exp_key, 1)
+	state = addRoundKey(state, exp_key, 1)
 
 	-- Repeat (Nr-1) times:
 	for round_num = 2, nr-1 do
-		state = aes.subBytes(state)
-		state = aes.shiftRows(state)
-		state = aes.mixColumns(state)
-		state = aes.addRoundKey(state, exp_key, round_num)
+		state = subBytes(state)
+		state = shiftRows(state)
+		state = mixColumns(state)
+		state = addRoundKey(state, exp_key, round_num)
 	end
 
 	-- Final round (No mixColumns()):
-	state = aes.subBytes(state)
-	state = aes.shiftRows(state)
-	state = aes.addRoundKey(state, exp_key, nr)
+	state = subBytes(state)
+	state = shiftRows(state)
+	state = addRoundKey(state, exp_key, nr)
 	return state
 end
 
-local aes.decrypt_block_customExpKey = function (data, exp_key--[[, key_type]])
+local decrypt_block_customExpKey(data, exp_key--[[, key_type]])
 	local state = data
 	local nr = 0
 	if #exp_key == 176 then -- Key type 1 (128-bits)
@@ -2018,20 +2018,20 @@ local aes.decrypt_block_customExpKey = function (data, exp_key--[[, key_type]])
 	end
 
 	-- Inital round:
-	state = aes.addRoundKey(state, exp_key, nr)
+	state = addRoundKey(state, exp_key, nr)
 
 	-- Repeat (Nr-1) times:
 	for round_num = nr-1, 2, -1 do
-		state = aes.invShiftRows(state)
-		state = aes.subBytes(state, true)
-		state = aes.addRoundKey(state, exp_key, round_num)
-		state = aes.mixColumns(state, true)
+		state = invShiftRows(state)
+		state = subBytes(state, true)
+		state = addRoundKey(state, exp_key, round_num)
+		state = mixColumns(state, true)
 	end
 
 	-- Final round (No mixColumns()):
-	state = aes.invShiftRows(state)
-	state = aes.subBytes(state, true)
-	state = aes.addRoundKey(state, exp_key, 1)
+	state = invShiftRows(state)
+	state = subBytes(state, true)
+	state = addRoundKey(state, exp_key, 1)
 	return state
 end
 
@@ -2041,10 +2041,10 @@ end
 
 -- CBC (cipher-block chaining) mode:
 
-aes.encrypt_bytestream = function (data, key, init_vector)
+local function encrypt_bytestream(data, key, init_vector)
 	local blocks = { init_vector }
 	local outputBytestream = {}
-	local exp_key = aes.key_schedule(key)
+	local exp_key = key_schedule(key)
 	if not init_vector then
 		error("encrypt_bytestream: No initalization vector was passed.", 2)
 	end
@@ -2065,13 +2065,13 @@ aes.encrypt_bytestream = function (data, key, init_vector)
 		end
 		for j=1, 16 do
 			block[j] = data[((i-1)*16)+j] or 0
-			block[j] = aes.bxor(block[j], blocks[i][j]) -- XOR this block with the previous one
+			block[j] = bxor(block[j], blocks[i][j]) -- XOR this block with the previous one
 		end
 		--print("#bytes: "..#block)
-		block = aes.encrypt_block_customExpKey(block, exp_key)
+		block = encrypt_block_customExpKey(block, exp_key)
 		table.insert(blocks, block)
 		for j=1, 16 do
-			aes.insert(outputBytestream, block[j])
+			insert(outputBytestream, block[j])
 		end
         if os.clock() - s >= 2.5 then
             os.queueEvent("")
@@ -2082,10 +2082,10 @@ aes.encrypt_bytestream = function (data, key, init_vector)
 	return outputBytestream
 end
 
-aes.decrypt_bytestream = function (data, key, init_vector)
+local function decrypt_bytestream(data, key, init_vector)
 	local blocks = { init_vector }
 	local outputBytestream = {}
-	local exp_key = aes.key_schedule(key)
+	local exp_key = key_schedule(key)
 	if not init_vector then
 		error("decrypt_bytestream: No initalization vector was passed.", 2)
 	end
@@ -2099,9 +2099,9 @@ aes.decrypt_bytestream = function (data, key, init_vector)
 			block[j] = data[((i-1)*16)+j] or 0
 		end
 		table.insert(blocks, block)
-		local dec_block = aes.decrypt_block_customExpKey(block, exp_key)
+		local dec_block = decrypt_block_customExpKey(block, exp_key)
 		for j=1, 16 do
-			dec_block[j] = aes.bxor(dec_block[j], blocks[i][j]) -- We use XOR on the plaintext, not the ciphertext
+			dec_block[j] = bxor(dec_block[j], blocks[i][j]) -- We use XOR on the plaintext, not the ciphertext
 			table.insert(outputBytestream, dec_block[j])
 		end
         if os.clock() - s >= 2.5 then
@@ -2123,16 +2123,16 @@ end
 
 -- Encrypt / Decrypt strings:
 
-local function ll.cryptolib.aesEncrypt(data, key, iv)
+function ll.cryptolib.aesEncrypt(data, key, iv)
 	local byteStream = {}
 	for i=1, #data do
 		table.insert(byteStream, string.byte(data, i, i))
 	end
 	local output_bytestream = {}
 	if iv then
-		output_bytestream = aes.encrypt_bytestream(byteStream, key, iv)
+		output_bytestream = encrypt_bytestream(byteStream, key, iv)
 	else
-		output_bytestream = aes.encrypt_bytestream_ecb(byteStream, key)
+		output_bytestream = encrypt_bytestream_ecb(byteStream, key)
 	end
 	local output = ""
 	for i=1, #output_bytestream do
@@ -2141,16 +2141,16 @@ local function ll.cryptolib.aesEncrypt(data, key, iv)
 	return output
 end
 
-local function ll.cryptolib.aesDecrypt(data, key, iv)
+function ll.cryptolib.aesDecrypt(data, key, iv)
 	local byteStream = {}
 	for i=1, #data do
 		table.insert(byteStream, string.byte(data, i, i))
 	end
 	local output_bytestream = {}
 	if iv then
-		output_bytestream = aes.decrypt_bytestream(byteStream, key, iv)
+		output_bytestream = decrypt_bytestream(byteStream, key, iv)
 	else
-		output_bytestream = aes.decrypt_bytestream_ecb(byteStream, key)
+		output_bytestream = decrypt_bytestream_ecb(byteStream, key)
 	end
 	local output = ""
 	for i=1, #output_bytestream do
@@ -2159,7 +2159,7 @@ local function ll.cryptolib.aesDecrypt(data, key, iv)
 	return output
 end
 
-local aes.davies_meyer = function (data, h0)
+local davies_meyer(data, h0)
 	local last_h = h0
     for dm_iter=1, 16 do
         for i=1, math.ceil(#data/16) do
@@ -2167,9 +2167,9 @@ local aes.davies_meyer = function (data, h0)
             for j=1, 16 do
                 block[j] = data[((i-1)*16)+j] or 0
             end
-            local block = aes.encrypt_block(last_h, block)
+            local block = encrypt_block(last_h, block)
             for j=1, 16 do
-                block[j] = aes.bxor(block[j], last_h[j]) -- XOR h[i-1] with h[i].
+                block[j] = bxor(block[j], last_h[j]) -- XOR h[i-1] with h[i].
             end
             last_h = block
             os.queueEvent("")
@@ -2179,7 +2179,7 @@ local aes.davies_meyer = function (data, h0)
 	return last_h
 end
 
-local function aes.increment_ctr = function (blk)
+local function increment_ctr(blk)
 	local cpy = {}
 	for i=1, 16 do
 		cpy[i] = blk[i] or 0
@@ -2195,7 +2195,7 @@ local function aes.increment_ctr = function (blk)
 	return cpy
 end
 
-local function aes.counter_mode_context = {
+local function counter_mode_context = {
 	key = {},
 	ctr = {},
 	stream_cache = {}, -- Use "leftover" bytes from generate() here.
@@ -2276,14 +2276,14 @@ local function aes.counter_mode_context = {
 			end
 			local blocksToGenerate = math.ceil((bytes - #genBytes) / 16)
 			for i=1, blocksToGenerate-1 do
-				self.ctr = aes.increment_ctr(self.ctr)
-				local block = aes.encrypt_block(self.ctr, self.key)
+				self.ctr = increment_ctr(self.ctr)
+				local block = encrypt_block(self.ctr, self.key)
 				for i=1, 16 do
 					table.insert(genBytes, block[i])
 				end
 			end
-			self.ctr = aes.increment_ctr(self.ctr)
-			local block = aes.encrypt_block(self.ctr, self.key)
+			self.ctr = increment_ctr(self.ctr)
+			local block = encrypt_block(self.ctr, self.key)
 			for i=1, (bytes - #genBytes) do
 				table.insert(genBytes, table.remove(block))
 			end
@@ -2295,12 +2295,12 @@ local function aes.counter_mode_context = {
 	end,
 }
 
-local function aes.new_ctrMode = function (key, iv)
+local function new_ctrMode(key, iv)
 	local context = {
 		stream_cache = {},
 		key = {},
 		iv = {},
-		__index = aes.counter_mode_context,
+		__index = counter_mode_context,
 	}
 	setmetatable(context, context)
 	context:set_key(key)
