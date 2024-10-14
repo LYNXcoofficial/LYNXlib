@@ -65,32 +65,24 @@
 --			lzw, best, ratio
 
 --LYNX CRYPTOLIB:
---  stringToBytes(str: string): Converts string to bytes. Added in v0.1.
---      str: String to be converted.
+--  rsaEncrypt(msg: string, key: table, bits: number, byteSize: number): Added in v0.1.1a.
+--	msg: String to be encrypted.
+--	key: Table deserealized & generated from https://pastebin.com/udGZapmD.
+--	bits: Number of bits max.
+--	byteSize: Number of bits in a byte (normally 8).
 
---  bytesToString(bytes: bytes): Converts bytes to string. Added in v0.1.
---      bytes: Bytes to be converted.
+--  rsaDecrypt(msg: string, key: table, bits: number, byteSize: number): Added in v0.1.1a.
+--	msg: String to be decrypted.
+--	key: Table deserealized & generated from https://pastebin.com/udGZapmD.
+--	bits: Number of bits max.
+--	byteSize: Number of bits in a byte (normally 8).
 
---  bytesToNumber(bytes: bytes, bits: number, byteSize: number): Converts bytes to number. Added in v0.1.
---      bytes: Bytes to be converted. Max length is bits/byteSize.
---      bits: Must be the same as used in numberToBytes.
---      byteSize: Must be the same as used in numberToBytes. Normally 8.
-
---  numberToBytes(num: number, bits: number, byteSize: number): Converts number to bytes. Added in v0.1.
---      num: Number to be converted to bytes. Max length is bits/byteSize.
---      bits: Must be the same as used in bytesToNumber.
---      byteSize: Must be the same as used in bytesToNumber. Normally 8.
-
---  crypt(key: table, data: number): Used to encrypt/decrypt data. Added in v0.1.
---      key: Either public or private key for encryption or decryption respectively.
---      data: Data to be encrypted or decrypted.
-
---  encrypt_str(data: string, key: string, iv: number): Added in v0.2.
+--  aesEncrypt(data: string, key: string, iv: number): Added in v0.1.
 --	data: String to be encrypted.
 --	key: String to be used as a key.
 --	iv: A number used as initalizaiton. Must be the same when enc/dec.
 
---  decrypt_str(data: string, key: string, iv: number): Added in v0.2.
+--  aesDecrypt(data: string, key: string, iv: number): Added in v0.1.
 --	data: String to be encrypted.
 --	key: String to be used as a key.
 --	iv: A number used as initalization. Must be the same when enc/dec.
@@ -110,8 +102,8 @@
 
 
 local ll = { }
-do
 ll.meta = { }
+do
 ll.meta.version = "0.1.1"
 settings.define("lynx.lynxlibPath", {
     value = shell.getRunningProgram()
@@ -171,43 +163,9 @@ end
 
 
 --LYNXMISC
-do
 ll.lynxmisc = { }
 ll.lm = ll.lynxmisc
-function ll.lynxmisc.twoColorPalette(mode, enableWhite)
-    for j = 1, 15 do
-        i = 2 ^ j
-        local r,g,b = term.getPaletteColor(i)
-        local x = math.max(r,g,b)
-        local y = math.max(r,g)
-        local c = math.max(g,b)
-        local m = math.max(b,r)
-        local rgb = {r,g,b}
-        --Primary colors
-        if mode == "RED" then rgb = {x,0,0}
-        elseif mode == "GREEN" then rgb = {0,x,0}
-        elseif mode == "BLUE" then rgb = {0,0,x}
-        elseif mode == "GRAYSCALE" then rgb = {x,x,x}
-        elseif mode == "GREYSCALE" then rgb = {x,x,x}
-        --Secondary colors
-        elseif mode == "YELLOW" then rgb = {x,x,0}
-        elseif mode == "CYAN" then rgb = {0,x,x}
-        elseif mode == "MAGENTA" then rgb = {x,0,x}
-        --Tertiary colors
-        elseif mode == "ORANGE" then rgb = {x,x/2,0}
-        elseif mode == "LIME" then rgb = {x/2,x,0}
-        elseif mode == "MINT" then rgb = {0,x,x/2}
-        elseif mode == "CORNFLOWER" then rgb = {0,x/2,x}
-        elseif mode == "PURPLE" then rgb = {x/2,0,x}
-        elseif mode == "FUCHSIA" then rgb = {x,0,x/2} end
-        if r == g and g == b and enableWhite then rgb = {x,x,x} end
-        --Primary-secondary color combos
-        if mode == "RED-CYAN" then term.setPaletteColor(i, r,c,c)
-        elseif mode == "GREEN-MAGENTA" then term.setPaletteColor(i, m,g,m)
-        elseif mode == "BLUE-YELLOW" then term.setPaletteColor(i, y,y,b)
-        else term.setPaletteColor(i, rgb[1], rgb[2], rgb[3]) end
-    end
-end
+do
 
 function ll.lynxmisc.inRange(a, x,y)
     if a >= x and a <= y  then return true
@@ -372,6 +330,8 @@ function ll.lynxmisc.scale(num, units, digits, roundMode, prefix)
     end
     return dNum
 end
+-- ends the do block
+end
 
 
 --ZIPLIB
@@ -534,6 +494,7 @@ function ll.ziplib.decompress(inp, method)
     elseif method:lower() == "ratio" then decompress(inp, bestRatio)
     end
 end
+-- ends the do block
 end
 
 
@@ -1418,9 +1379,19 @@ local function crypt(key, number)
 	return tostring(modexp(bigint(number), exp, bigint(key.shared)))
 end
 
-aes = {}
+function ll.cryptolib.rsaEncrypt(msg, key, bits, byteSize)
+	local res = bytesToNumber(stringToBytes(msg), bits, byteSize)
+	return crypt(key, res)
+end
 
-aes.sbox = {
+function ll.cryptolib.rsaDecrypt(msg, key, bits, byteSize)
+	local decrypted = crypt(privateKey, encrypted)
+	return bytesToString(numberToBytes(decrypted, bits, byteSize))
+end
+
+local aes = {}
+
+local aes.sbox = {
 [0]=0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
 0xCA, 0x82, 0xC9, 0x7D, 0xFA, 0x59, 0x47, 0xF0, 0xAD, 0xD4, 0xA2, 0xAF, 0x9C, 0xA4, 0x72, 0xC0,
 0xB7, 0xFD, 0x93, 0x26, 0x36, 0x3F, 0xF7, 0xCC, 0x34, 0xA5, 0xE5, 0xF1, 0x71, 0xD8, 0x31, 0x15,
@@ -1438,7 +1409,7 @@ aes.sbox = {
 0xE1, 0xF8, 0x98, 0x11, 0x69, 0xD9, 0x8E, 0x94, 0x9B, 0x1E, 0x87, 0xE9, 0xCE, 0x55, 0x28, 0xDF,
 0x8C, 0xA1, 0x89, 0x0D, 0xBF, 0xE6, 0x42, 0x68, 0x41, 0x99, 0x2D, 0x0F, 0xB0, 0x54, 0xBB, 0x16}
 
-aes.inv_sbox = {
+local aes.inv_sbox = {
 [0]=0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38, 0xBF, 0x40, 0xA3, 0x9E, 0x81, 0xF3, 0xD7, 0xFB,
 0x7C, 0xE3, 0x39, 0x82, 0x9B, 0x2F, 0xFF, 0x87, 0x34, 0x8E, 0x43, 0x44, 0xC4, 0xDE, 0xE9, 0xCB,
 0x54, 0x7B, 0x94, 0x32, 0xA6, 0xC2, 0x23, 0x3D, 0xEE, 0x4C, 0x95, 0x0B, 0x42, 0xFA, 0xC3, 0x4E,
@@ -1456,7 +1427,7 @@ aes.inv_sbox = {
 0xA0, 0xE0, 0x3B, 0x4D, 0xAE, 0x2A, 0xF5, 0xB0, 0xC8, 0xEB, 0xBB, 0x3C, 0x83, 0x53, 0x99, 0x61,
 0x17, 0x2B, 0x04, 0x7E, 0xBA, 0x77, 0xD6, 0x26, 0xE1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0C, 0x7D}
 
-aes.Rcon = {
+local aes.Rcon = {
 [0]=0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a,
 0x2f, 0x5e, 0xbc, 0x63, 0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39,
 0x72, 0xe4, 0xd3, 0xbd, 0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a,
@@ -1476,7 +1447,7 @@ aes.Rcon = {
 
 -- Finite-field multiplication lookup tables:
 
-aes.mul_2 = {
+local aes.mul_2 = {
 [0]=0x00,0x02,0x04,0x06,0x08,0x0a,0x0c,0x0e,0x10,0x12,0x14,0x16,0x18,0x1a,0x1c,0x1e,
 0x20,0x22,0x24,0x26,0x28,0x2a,0x2c,0x2e,0x30,0x32,0x34,0x36,0x38,0x3a,0x3c,0x3e,
 0x40,0x42,0x44,0x46,0x48,0x4a,0x4c,0x4e,0x50,0x52,0x54,0x56,0x58,0x5a,0x5c,0x5e,
@@ -1495,7 +1466,7 @@ aes.mul_2 = {
 0xfb,0xf9,0xff,0xfd,0xf3,0xf1,0xf7,0xf5,0xeb,0xe9,0xef,0xed,0xe3,0xe1,0xe7,0xe5,
 }
 
-aes.mul_3 = {
+local aes.mul_3 = {
 [0]=0x00,0x03,0x06,0x05,0x0c,0x0f,0x0a,0x09,0x18,0x1b,0x1e,0x1d,0x14,0x17,0x12,0x11,
 0x30,0x33,0x36,0x35,0x3c,0x3f,0x3a,0x39,0x28,0x2b,0x2e,0x2d,0x24,0x27,0x22,0x21,
 0x60,0x63,0x66,0x65,0x6c,0x6f,0x6a,0x69,0x78,0x7b,0x7e,0x7d,0x74,0x77,0x72,0x71,
@@ -1514,7 +1485,7 @@ aes.mul_3 = {
 0x0b,0x08,0x0d,0x0e,0x07,0x04,0x01,0x02,0x13,0x10,0x15,0x16,0x1f,0x1c,0x19,0x1a,
 }
 
-aes.mul_9 = {
+local aes.mul_9 = {
 [0]=0x00,0x09,0x12,0x1b,0x24,0x2d,0x36,0x3f,0x48,0x41,0x5a,0x53,0x6c,0x65,0x7e,0x77,
 0x90,0x99,0x82,0x8b,0xb4,0xbd,0xa6,0xaf,0xd8,0xd1,0xca,0xc3,0xfc,0xf5,0xee,0xe7,
 0x3b,0x32,0x29,0x20,0x1f,0x16,0x0d,0x04,0x73,0x7a,0x61,0x68,0x57,0x5e,0x45,0x4c,
@@ -1533,7 +1504,7 @@ aes.mul_9 = {
 0x31,0x38,0x23,0x2a,0x15,0x1c,0x07,0x0e,0x79,0x70,0x6b,0x62,0x5d,0x54,0x4f,0x46,
 }
 
-aes.mul_11 = {
+local aes.mul_11 = {
 [0]=0x00,0x0b,0x16,0x1d,0x2c,0x27,0x3a,0x31,0x58,0x53,0x4e,0x45,0x74,0x7f,0x62,0x69,
 0xb0,0xbb,0xa6,0xad,0x9c,0x97,0x8a,0x81,0xe8,0xe3,0xfe,0xf5,0xc4,0xcf,0xd2,0xd9,
 0x7b,0x70,0x6d,0x66,0x57,0x5c,0x41,0x4a,0x23,0x28,0x35,0x3e,0x0f,0x04,0x19,0x12,
@@ -1552,7 +1523,7 @@ aes.mul_11 = {
 0xca,0xc1,0xdc,0xd7,0xe6,0xed,0xf0,0xfb,0x92,0x99,0x84,0x8f,0xbe,0xb5,0xa8,0xa3,
 }
 
-aes.mul_13 = {
+local aes.mul_13 = {
 [0]=0x00,0x0d,0x1a,0x17,0x34,0x39,0x2e,0x23,0x68,0x65,0x72,0x7f,0x5c,0x51,0x46,0x4b,
 0xd0,0xdd,0xca,0xc7,0xe4,0xe9,0xfe,0xf3,0xb8,0xb5,0xa2,0xaf,0x8c,0x81,0x96,0x9b,
 0xbb,0xb6,0xa1,0xac,0x8f,0x82,0x95,0x98,0xd3,0xde,0xc9,0xc4,0xe7,0xea,0xfd,0xf0,
@@ -1571,7 +1542,7 @@ aes.mul_13 = {
 0xdc,0xd1,0xc6,0xcb,0xe8,0xe5,0xf2,0xff,0xb4,0xb9,0xae,0xa3,0x80,0x8d,0x9a,0x97,
 }
 
-aes.mul_14 = {
+local aes.mul_14 = {
 [0]=0x00,0x0e,0x1c,0x12,0x38,0x36,0x24,0x2a,0x70,0x7e,0x6c,0x62,0x48,0x46,0x54,0x5a,
 0xe0,0xee,0xfc,0xf2,0xd8,0xd6,0xc4,0xca,0x90,0x9e,0x8c,0x82,0xa8,0xa6,0xb4,0xba,
 0xdb,0xd5,0xc7,0xc9,0xe3,0xed,0xff,0xf1,0xab,0xa5,0xb7,0xb9,0x93,0x9d,0x8f,0x81,
@@ -1590,10 +1561,10 @@ aes.mul_14 = {
 0xd7,0xd9,0xcb,0xc5,0xef,0xe1,0xf3,0xfd,0xa7,0xa9,0xbb,0xb5,0x9f,0x91,0x83,0x8d,
 }
 
-aes.bxor = bit.bxor
-aes.insert = table.insert
+local aes.bxor = bit.bxor
+local aes.insert = table.insert
 
-aes.copy = function (input)
+local aes.copy = function (input)
 	local c = {}
 	for i, v in pairs(input) do
 		c[i] = v
@@ -1601,7 +1572,7 @@ aes.copy = function (input)
 	return c
 end
 
-aes.subBytes = function (input, invert)
+local aes.subBytes = function (input, invert)
 	for i=1, #input do
 		if not (aes.sbox[input[i]] and aes.inv_sbox[input[i]]) then
 			error("subBytes: input["..i.."] > 0xFF")
@@ -1615,7 +1586,7 @@ aes.subBytes = function (input, invert)
 	return input
 end
 
-aes.shiftRows = function (input)
+local aes.shiftRows = function (input)
 	local copy = {}
 	-- Row 1: No change
 	copy[1] = input[1]
@@ -1640,7 +1611,7 @@ aes.shiftRows = function (input)
 	return copy
 end
 
-aes.invShiftRows = function (input)
+local aes.invShiftRows = function (input)
 	local copy = {}
 	-- Row 1: No change
 	copy[1] = input[1]
@@ -1665,7 +1636,7 @@ aes.invShiftRows = function (input)
 	return copy
 end
 
-aes.finite_field_mul = function (a,b) -- Multiply two numbers in GF(256), assuming that polynomials are 8 bits wide
+local aes.finite_field_mul = function (a,b) -- Multiply two numbers in GF(256), assuming that polynomials are 8 bits wide
 	local product = 0
 	local mulA, mulB = a,b
 	for i=1, 8 do
@@ -1686,7 +1657,7 @@ aes.finite_field_mul = function (a,b) -- Multiply two numbers in GF(256), assumi
 	return product
 end
 
-aes.mixColumn = function (column)
+local aes.mixColumn = function (column)
 	local output = {}
 	--print("MixColumn: #column: "..#column)
 	output[1] = aes.bxor( aes.mul_2[column[1]], aes.bxor( aes.mul_3[column[2]], aes.bxor( column[3], column[4] ) ) )
@@ -1696,7 +1667,7 @@ aes.mixColumn = function (column)
 	return output
 end
 
-aes.invMixColumn = function (column)
+local aes.invMixColumn = function (column)
 	local output = {}
 	--print("InvMixColumn: #column: "..#column)
 	output[1] = aes.bxor( aes.mul_14[column[1]], aes.bxor( aes.mul_11[column[2]], aes.bxor( aes.mul_13[column[3]], aes.mul_9[column[4]] ) ) )
@@ -1706,7 +1677,7 @@ aes.invMixColumn = function (column)
 	return output
 end
 
-aes.mixColumns = function (input, invert)
+local aes.mixColumns = function (input, invert)
 	--print("MixColumns: #input: "..#input)
 	-- Ooops. I mixed the ROWS instead of the COLUMNS on accident.
 	local output = {}
@@ -1776,7 +1747,7 @@ aes.mixColumns = function (input, invert)
 	return output
 end
 
-aes.addRoundKey = function (input, exp_key, round)
+local aes.addRoundKey = function (input, exp_key, round)
 	local output = {}
 	for i=1, 16 do
 		assert(input[i], "input["..i.."]=nil!")
@@ -1786,7 +1757,7 @@ aes.addRoundKey = function (input, exp_key, round)
 	return output
 end
 
-aes.key_schedule = function (enc_key)
+local aes.key_schedule = function (enc_key)
 	local function core(in1, in2, in3, in4, i)
 		local s1 = in2
 		local s2 = in3
@@ -1893,7 +1864,7 @@ end
 -- Is transformed into this:
 -- {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF}, {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0,0,0,0} (16 0xFF bytes, followed by 12 0xFF bytes and 4 0x00 bytes for padding)
 
-aes.breakIntoBlocks = function (data)
+local aes.breakIntoBlocks = function (data)
 	if type(data) ~= "string" then
 		error("breakIntoBlocks: data is not a string", 2)
 	end
@@ -1919,7 +1890,7 @@ end
 -- local key = strToBlocks(keyStr)
 -- key = key[1]
 
-aes.strToBlocks = function (str)
+local aes.strToBlocks = function (str)
 	local rawBytestream = {}
 	local blocks = {}
 	for i=1, #str do
@@ -1936,7 +1907,7 @@ end
 
 -- Encrypt / Decrypt individual blocks:
 
-aes.encrypt_block = function (data, key)
+local aes.encrypt_block = function (data, key)
 	local exp_key = aes.key_schedule(key)
 	local state = data
 	local nr = 0
@@ -1969,7 +1940,7 @@ aes.encrypt_block = function (data, key)
 	return state
 end
 
-aes.decrypt_block = function (data, key)
+local aes.decrypt_block = function (data, key)
 	local exp_key = aes.key_schedule(key)
 	local state = data
 	local nr = 0
@@ -2002,7 +1973,7 @@ aes.decrypt_block = function (data, key)
 	return state
 end
 
-aes.encrypt_block_customExpKey = function (data, exp_key--[[, key_type]]) -- Encrypt blocks, but using a precalculated expanded key instead of performing the key expansion on every step like with the normal encrypt_block(2) call
+local aes.encrypt_block_customExpKey = function (data, exp_key--[[, key_type]]) -- Encrypt blocks, but using a precalculated expanded key instead of performing the key expansion on every step like with the normal encrypt_block(2) call
 	local state = data
 	local nr = 0
 	if #exp_key == 176 then -- Key type 1 (128-bits)
@@ -2033,7 +2004,7 @@ aes.encrypt_block_customExpKey = function (data, exp_key--[[, key_type]]) -- Enc
 	return state
 end
 
-aes.decrypt_block_customExpKey = function (data, exp_key--[[, key_type]])
+local aes.decrypt_block_customExpKey = function (data, exp_key--[[, key_type]])
 	local state = data
 	local nr = 0
 	if #exp_key == 176 then -- Key type 1 (128-bits)
@@ -2066,51 +2037,7 @@ end
 
 -- Encrypt / Decrypt bytestreams (tables of bytes):
 
--- ECB (electronic codebook) Mode (not secure, do not use):
 
-aes.encrypt_bytestream_ecb = function (data, key)
-	local blocks = {}
-	local outputBytestream = {}
-	local exp_key = aes.key_schedule(key)
-	for i=1, #data, 16 do
-		local block = {}
-		for j=1, 16 do
-			block[j] = data[i+(j-1)] or 0
-		end
-		block = aes.encrypt_block_customExpKey(block, exp_key)
-		for j=1, 16 do
-			table.insert(outputBytestream, block[j])
-		end
-		os.queueEvent("")
-		os.pullEvent("")
-	end
-	return outputBytestream
-end
-
-aes.decrypt_bytestream_ecb = function (data, key)
-	local outputBytestream = {}
-	local exp_key = aes.key_schedule(key)
-	for i=1, #data, 16 do
-		local block = {}
-		for j=1, 16 do
-			block[j] = data[i+(j-1)] or 0
-		end
-		block = aes.decrypt_block_customExpKey(block, exp_key)
-		for j=1, 16 do
-			table.insert(outputBytestream, block[j])
-		end
-		os.queueEvent("")
-		os.pullEvent("")
-	end
-	for i=#outputBytestream, 1, -1 do
-		if outputBytestream[i] ~= 0 then
-			break
-		else
-			outputBytestream[i] = nil
-		end
-	end
-	return outputBytestream
-end
 
 -- CBC (cipher-block chaining) mode:
 
@@ -2196,7 +2123,7 @@ end
 
 -- Encrypt / Decrypt strings:
 
-aes.encrypt_str = function (data, key, iv)
+local function ll.cryptolib.aesEncrypt(data, key, iv)
 	local byteStream = {}
 	for i=1, #data do
 		table.insert(byteStream, string.byte(data, i, i))
@@ -2214,7 +2141,7 @@ aes.encrypt_str = function (data, key, iv)
 	return output
 end
 
-aes.decrypt_str = function (data, key, iv)
+local function ll.cryptolib.aesDecrypt(data, key, iv)
 	local byteStream = {}
 	for i=1, #data do
 		table.insert(byteStream, string.byte(data, i, i))
@@ -2232,7 +2159,7 @@ aes.decrypt_str = function (data, key, iv)
 	return output
 end
 
-aes.davies_meyer = function (data, h0)
+local aes.davies_meyer = function (data, h0)
 	local last_h = h0
     for dm_iter=1, 16 do
         for i=1, math.ceil(#data/16) do
@@ -2252,7 +2179,7 @@ aes.davies_meyer = function (data, h0)
 	return last_h
 end
 
-aes.increment_ctr = function (blk)
+local function aes.increment_ctr = function (blk)
 	local cpy = {}
 	for i=1, 16 do
 		cpy[i] = blk[i] or 0
@@ -2268,7 +2195,7 @@ aes.increment_ctr = function (blk)
 	return cpy
 end
 
-aes.counter_mode_context = {
+local function aes.counter_mode_context = {
 	key = {},
 	ctr = {},
 	stream_cache = {}, -- Use "leftover" bytes from generate() here.
@@ -2368,7 +2295,7 @@ aes.counter_mode_context = {
 	end,
 }
 
-aes.new_ctrMode = function (key, iv)
+local function aes.new_ctrMode = function (key, iv)
 	local context = {
 		stream_cache = {},
 		key = {},
@@ -2381,7 +2308,6 @@ aes.new_ctrMode = function (key, iv)
 	return context
 end
 end
-ll.cryptolib = { stringToBytes = stringToBytes, bytesToString = bytesToString, numberToBytes = numberToBytes, bytesToNumber = bytesToNumber, crypt = crypt, aes_encrypt = aes.encrypt_str, aes_decrypt = aes.decrypt_str }
 
 
 
