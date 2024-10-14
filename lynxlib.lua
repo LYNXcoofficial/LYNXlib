@@ -2195,7 +2195,7 @@ local function increment_ctr(blk)
 	return cpy
 end
 
-local function counter_mode_context = {
+local function counter_mode_context()
 	key = {},
 	ctr = {},
 	stream_cache = {}, -- Use "leftover" bytes from generate() here.
