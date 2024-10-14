@@ -2159,7 +2159,7 @@ function ll.cryptolib.aesDecrypt(data, key, iv)
 	return output
 end
 
-local davies_meyer(data, h0)
+local function davies_meyer(data, h0)
 	local last_h = h0
     for dm_iter=1, 16 do
         for i=1, math.ceil(#data/16) do
