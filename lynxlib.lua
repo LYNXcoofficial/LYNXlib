@@ -1564,7 +1564,7 @@ local mul_14 = {
 local bxor = bit.bxor
 local insert = table.insert
 
-local copy(input)
+local function copy(input)
 	local c = {}
 	for i, v in pairs(input) do
 		c[i] = v
@@ -1572,7 +1572,7 @@ local copy(input)
 	return c
 end
 
-local subBytes(input, invert)
+local function subBytes(input, invert)
 	for i=1, #input do
 		if not (sbox[input[i]] and inv_sbox[input[i]]) then
 			error("subBytes: input["..i.."] > 0xFF")
@@ -1586,7 +1586,7 @@ local subBytes(input, invert)
 	return input
 end
 
-local shiftRows(input)
+local function shiftRows(input)
 	local copy = {}
 	-- Row 1: No change
 	copy[1] = input[1]
@@ -1611,7 +1611,7 @@ local shiftRows(input)
 	return copy
 end
 
-local invShiftRows(input)
+local function invShiftRows(input)
 	local copy = {}
 	-- Row 1: No change
 	copy[1] = input[1]
@@ -1636,7 +1636,7 @@ local invShiftRows(input)
 	return copy
 end
 
-local finite_field_mul(a,b) -- Multiply two numbers in GF(256), assuming that polynomials are 8 bits wide
+local function finite_field_mul(a,b) -- Multiply two numbers in GF(256), assuming that polynomials are 8 bits wide
 	local product = 0
 	local mulA, mulB = a,b
 	for i=1, 8 do
@@ -1657,7 +1657,7 @@ local finite_field_mul(a,b) -- Multiply two numbers in GF(256), assuming that po
 	return product
 end
 
-local mixColumn(column)
+local function mixColumn(column)
 	local output = {}
 	--print("MixColumn: #column: "..#column)
 	output[1] = bxor( mul_2[column[1]], bxor( mul_3[column[2]], bxor( column[3], column[4] ) ) )
@@ -1667,7 +1667,7 @@ local mixColumn(column)
 	return output
 end
 
-local invMixColumn(column)
+local function invMixColumn(column)
 	local output = {}
 	--print("InvMixColumn: #column: "..#column)
 	output[1] = bxor( mul_14[column[1]], bxor( mul_11[column[2]], bxor( mul_13[column[3]], mul_9[column[4]] ) ) )
@@ -1677,7 +1677,7 @@ local invMixColumn(column)
 	return output
 end
 
-local mixColumns(input, invert)
+local function mixColumns(input, invert)
 	--print("MixColumns: #input: "..#input)
 	-- Ooops. I mixed the ROWS instead of the COLUMNS on accident.
 	local output = {}
@@ -1747,7 +1747,7 @@ local mixColumns(input, invert)
 	return output
 end
 
-local addRoundKey(input, exp_key, round)
+local function addRoundKey(input, exp_key, round)
 	local output = {}
 	for i=1, 16 do
 		assert(input[i], "input["..i.."]=nil!")
@@ -1757,7 +1757,7 @@ local addRoundKey(input, exp_key, round)
 	return output
 end
 
-local key_schedule(enc_key)
+local function key_schedule(enc_key)
 	local function core(in1, in2, in3, in4, i)
 		local s1 = in2
 		local s2 = in3
@@ -1864,7 +1864,7 @@ end
 -- Is transformed into this:
 -- {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF}, {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0,0,0,0} (16 0xFF bytes, followed by 12 0xFF bytes and 4 0x00 bytes for padding)
 
-local breakIntoBlocks(data)
+local function breakIntoBlocks(data)
 	if type(data) ~= "string" then
 		error("breakIntoBlocks: data is not a string", 2)
 	end
@@ -1890,7 +1890,7 @@ end
 -- local key = strToBlocks(keyStr)
 -- key = key[1]
 
-local strToBlocks(str)
+local function strToBlocks(str)
 	local rawBytestream = {}
 	local blocks = {}
 	for i=1, #str do
@@ -1907,7 +1907,7 @@ end
 
 -- Encrypt / Decrypt individual blocks:
 
-local encrypt_block(data, key)
+local function encrypt_block(data, key)
 	local exp_key = key_schedule(key)
 	local state = data
 	local nr = 0
@@ -1940,7 +1940,7 @@ local encrypt_block(data, key)
 	return state
 end
 
-local decrypt_block(data, key)
+local function decrypt_block(data, key)
 	local exp_key = key_schedule(key)
 	local state = data
 	local nr = 0
@@ -1973,7 +1973,7 @@ local decrypt_block(data, key)
 	return state
 end
 
-local encrypt_block_customExpKey(data, exp_key--[[, key_type]]) -- Encrypt blocks, but using a precalculated expanded key instead of performing the key expansion on every step like with the normal encrypt_block(2) call
+local function encrypt_block_customExpKey(data, exp_key--[[, key_type]]) -- Encrypt blocks, but using a precalculated expanded key instead of performing the key expansion on every step like with the normal encrypt_block(2) call
 	local state = data
 	local nr = 0
 	if #exp_key == 176 then -- Key type 1 (128-bits)
@@ -2004,7 +2004,7 @@ local encrypt_block_customExpKey(data, exp_key--[[, key_type]]) -- Encrypt block
 	return state
 end
 
-local decrypt_block_customExpKey(data, exp_key--[[, key_type]])
+local function decrypt_block_customExpKey(data, exp_key--[[, key_type]])
 	local state = data
 	local nr = 0
 	if #exp_key == 176 then -- Key type 1 (128-bits)
